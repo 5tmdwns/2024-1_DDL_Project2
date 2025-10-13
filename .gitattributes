@@ -1,2 +1,0 @@
-sim/xsim.log filter=lfs diff=lfs merge=lfs -text
-sim/logs/sim.log filter=lfs diff=lfs merge=lfs -text
