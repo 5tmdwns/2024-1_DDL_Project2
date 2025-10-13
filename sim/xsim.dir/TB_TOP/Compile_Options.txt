@@ -1,0 +1,1 @@
+"TB_TOP" -debug "wave" -s "TB_TOP" -timescale "1ns/1ps" -log "logs/elab.log" 

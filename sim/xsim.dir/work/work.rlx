@@ -1,0 +1,12 @@
+0.7
+2020.2
+Apr 18 2022
+15:53:03
+/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/CLOCK.sv,1760339319,systemVerilog,,/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/CONTROLLER.sv,,CLOCK,,,,,,,,
+/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/CONTROLLER.sv,1760343327,systemVerilog,,/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/TRAFFICLIGHT.sv,,CONTROLLER,,,,,,,,
+/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/MEMORY.sv,1760342110,systemVerilog,,/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/RANK_CALCULATOR.sv,,MEMORY,,,,,,,,
+/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/RANK_CALCULATOR.sv,1760342202,systemVerilog,,/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/TB_TOP.sv,,RANK_CALCULATOR,,,,,,,,
+/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/SYSTEM_BUS.sv,1760343909,systemVerilog,,/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/CLOCK.sv,,SYSTEM_BUS,,,,,,,,
+/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/TB_TOP.sv,1760346834,systemVerilog,,,,TB_TOP,,,,,,,,
+/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/TOP.sv,1760343529,systemVerilog,/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/CLOCK.sv;/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/CONTROLLER.sv;/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/MEMORY.sv;/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/RANK_CALCULATOR.sv;/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/SYSTEM_BUS.sv;/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/TB_TOP.sv;/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/TRAFFICLIGHT.sv,/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/SYSTEM_BUS.sv,,$unit_TOP_sv_4071229484;TOP,,,,,,,,
+/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/TRAFFICLIGHT.sv,1760343394,systemVerilog,,/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/MEMORY.sv,,TRAFFICLIGHT,,,,,,,,

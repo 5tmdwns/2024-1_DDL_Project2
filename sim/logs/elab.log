@@ -1,0 +1,20 @@
+Vivado Simulator v2022.1
+Copyright 1986-1999, 2001-2022 Xilinx, Inc. All Rights Reserved.
+Running: /home/gaesol2ee/tools/Xilinx/Vivado/2022.1/bin/unwrapped/lnx64.o/xelab TB_TOP -debug wave -s TB_TOP -timescale 1ns/1ps -log logs/elab.log 
+Multi-threading is on. Using 10 slave threads.
+Starting static elaboration
+Pass Through NonSizing Optimizer
+Completed static elaboration
+Starting simulation data flow analysis
+Completed simulation data flow analysis
+Time Resolution for simulation is 1ps
+Compiling package work.$unit_TOP_sv_4071229484
+Compiling module work.SYSTEM_BUS
+Compiling module work.CLOCK
+Compiling module work.CONTROLLER
+Compiling module work.TRAFFICLIGHT
+Compiling module work.MEMORY
+Compiling module work.RANK_CALCULATOR
+Compiling module work.TOP
+Compiling module work.TB_TOP
+Built simulation snapshot TB_TOP
