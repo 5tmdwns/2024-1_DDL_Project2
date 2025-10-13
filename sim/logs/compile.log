@@ -1,0 +1,16 @@
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/TOP.sv" into library work
+INFO: [VRFC 10-311] analyzing module TOP
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/SYSTEM_BUS.sv" into library work
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/CLOCK.sv" into library work
+INFO: [VRFC 10-311] analyzing module CLOCK
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/CONTROLLER.sv" into library work
+INFO: [VRFC 10-311] analyzing module CONTROLLER
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/TRAFFICLIGHT.sv" into library work
+INFO: [VRFC 10-311] analyzing module TRAFFICLIGHT
+WARNING: [VRFC 10-8497] literal value 'd40 truncated to fit in 5 bits [/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/TRAFFICLIGHT.sv:20]
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/MEMORY.sv" into library work
+INFO: [VRFC 10-311] analyzing module MEMORY
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/RANK_CALCULATOR.sv" into library work
+INFO: [VRFC 10-311] analyzing module RANK_CALCULATOR
+INFO: [VRFC 10-2263] Analyzing SystemVerilog file "/home/gaesol2ee/verilogWorkspace/DDL_Project2/rtl/TB_TOP.sv" into library work
+INFO: [VRFC 10-311] analyzing module TB_TOP
