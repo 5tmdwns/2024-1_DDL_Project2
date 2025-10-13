@@ -1,0 +1,22 @@
+typedef enum bit {READ, WRITE} MEM_OP;
+module TOP (
+	    input logic CLK,
+	    input logic [2:0] MAIN_TRAFFIC, COUNTRY_TRAFFIC,
+	    output logic [1:0] COUNTRYLIGHT, MAINLIGHT
+	    );
+
+   SYSTEM_BUS SB_INTF(
+		      .CLK(CLK),
+		      .MAIN_TRAFFIC(MAIN_TRAFFIC),
+		      .COUNTRY_TRAFFIC(COUNTRY_TRAFFIC),
+		      .COUNTRYLIGHT(COUNTRYLIGHT),
+		      .MAINLIGHT(MAINLIGHT)
+		      );
+
+   CLOCK CLOCK (.i0(SB_INTF));
+   CONTROLLER CONTROLLER (.i1(SB_INTF));
+   TRAFFICLIGHT TRAFFICLIGHT (.i2(SB_INTF));
+   MEMORY MEMORY (.i3(SB_INTF));
+   RANK_CALCULATOR RANK_CALCULATOR (.i4(SB_INTF));
+
+endmodule // top
