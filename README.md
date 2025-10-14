@@ -1,6 +1,8 @@
 <p align="center">
   <h1 align="center">실시간 교통량을 기반으로 한 교차로 신호등 Controller✨</h1>
-  <img width="90%" alt="Simulation Full Screen" src="https://github.com/user-attachments/assets/4a4d7587-af02-4c5b-8604-4b835c97bd37" />
+  <p align="center">
+    <img width="90%" alt="Simulation Full Screen" src="https://github.com/user-attachments/assets/4a4d7587-af02-4c5b-8604-4b835c97bd37" />
+  </p>
 </p>
 
 ## Index ⭐️
@@ -92,8 +94,8 @@ controller 의 기능은 총 2 개로 다음과 같다. <br/>
 
 #### System 4. Memory1
 
-<p align="center" style="margin: 20px 0;">
-<img width="90%" alt="Memory1 Image" src="https://github.com/user-attachments/assets/80a66ed8-d673-4285-917d-f90060125a47" />
+<p style="margin: 20px 0;">
+<img width="50%" alt="Memory1 Image" src="https://github.com/user-attachments/assets/80a66ed8-d673-4285-917d-f90060125a47" />
 </p>
 
 &nbsp;memory1 은 controller, 디지털 시계, rank_cal 3 개에서 모두 입력을 받는다. <br/>
