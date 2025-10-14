@@ -688,7 +688,7 @@ endinterface // SYSTEM_BUS
 	<img width="90%" alt="Memory Overflow Log Image" src="https://github.com/user-attachments/assets/e2e3a9a5-7ae9-40f9-b09e-361ea9fefaf4" />
 </p>
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="Memory Overflow Waveform Image" src="https://github.com/user-attachments/assets/38fad131-5f5f-489c-b541-03eb9200a949" />
 </p>
 
@@ -706,7 +706,7 @@ CONTROLLER는 메모리가 CONTROLLER에게 주는 정보인 accum_data2와 현�
 </p>
 
 &nbsp;위의 Time은 1ns의 기준입니다. <br/>
-사진과 같이 CHECK_PULSE FAIL 이 45ns, CHECK_FINAL_PULSE FAIL이 47ns에서 발생합니다. <br/>
+사진과 같이 CHECK_PULSE FAIL이 45ns, CHECK_FINAL_PULSE FAIL이 47ns에서 발생합니다. <br/>
 이는, Concurrent Assertion으로 검증을 해야한다. <br/>
 
 <p align="center" style="margin: 20px 0;">
