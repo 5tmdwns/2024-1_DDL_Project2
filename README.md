@@ -30,21 +30,20 @@
 - [6. 결론](#6-결론) <br/>
 
 ## 1. 프로젝트 주제 및 목표
-&nbsp;본 프로젝트의 주제는 매 시간 마다 Main Highway 의 실시간 교통량과 Country road 에 정차되어있는 자동차 대수를 측정하여 이를 Memory1 에 저장하여 Memory1 에 저장 되어있는 누적교통량을 기반해서 탄력적으로 신호등의 주기를 조절하는 시스템을 구성하였습니다. <br/>
+&nbsp;본 프로젝트의 주제는 매 시간 마다 Main Highway의 실시간 교통량과 Country road에 정차되어있는 자동차 대수를 측정하여 이를 Memory1에 저장하여 Memory1에 저장 되어있는 누적교통량을 기반해서 탄력적으로 신호등의 주기를 조절하는 시스템을 구성하였습니다. <br/>
 특히, 이번 프로젝트 에는 전체 신호등 시스템을 다수의 모듈로 나누고, 모듈들이 데이터 정보를 일방향으로 보내는 것이 아닌, 다른 모듈과 쌍방향으로 데이터를 주고 받는 것에 집중하여 설계를 진행하였습니다. <br/>
-이때, 모듈간의 연결을 System Verilog 의 Interface 기능을 이용해 각 모듈이, 그리고 합친 전체 신호등 시스템이 모두 잘 작동하는지 확인하였습니다. <br/>
-또한, 이런 확인 및 검증과정에서 System Verilog 의 Assertion 등을 활용해 다양한 입력 패턴을 이용해 Test Bench 를 작성해 시스템의 응답을 확인하였습니다. <br/>
+이때, 모듈간의 연결을 System Verilog의 Interface 기능을 이용해 각 모듈이, 그리고 합친 전체 신호등 시스템이 모두 잘 작동하는지 확인하였습니다. <br/>
+또한, 이런 확인 및 검증과정에서 System Verilog의 Assertion 등을 활용해 다양한 입력 패턴을 이용해 Testbench를 작성해 시스템의 응답을 확인하였습니다. <br/>
 
 ## 2. 프로젝트 설계 및 구성
 ### 2-1. Circuit Diagram
 <p align="center" style="margin: 20px 0;">
-  <img width="100%" alt="Circuit Diagram" src="https://github.com/user-attachments/assets/dac83661-b667-426d-81ba-236f7f80f53c" />
+  <img width="90%" alt="Circuit Diagram" src="https://github.com/user-attachments/assets/dac83661-b667-426d-81ba-236f7f80f53c" />
 </p>
 
 ### 2-2. System Description
 &nbsp;해당 신호등 시스템은 총 다섯개의 system이 상호작용합니다. <br/>
-다섯개의 시스템은 CLOCK, TRAFFICLIGHT, CONTROLLER, MEMORY, RANK_CALCULATOR로 구성된다. <br/>
-각각의 역할은 다음과 같다. <br/>
+다섯개의 시스템은 CLOCK, TRAFFICLIGHT, CONTROLLER, MEMORY, RANK_CALCULATOR로 구성됩니다. <br/>
 
 <p align="center" style="margin: 20px 0;">
   <img width="90%" alt="Highway Image" src="https://github.com/user-attachments/assets/09e4ac0a-0f78-4d41-b25a-765b1f56c4fb" />
@@ -54,7 +53,7 @@
 기본적으로 저희가 모델링한 4거리는 Main Highway와 Country Road 2개의 도로가 교차 되어있습니다. <br/>
 Main Highway는 고속도로의 개념으로 기본적으로 통행량이 많습니다. <br/>
 Country Road는 Main Highway에 비하여 교통량이 적습니다. <br/>
-따라서 Main Highway의 파란불의 주기는 Country Road의 파란불의 주기보다 더욱 짧게 설정하였습니다. <br/>
+따라서, Main Highway의 파란불의 주기는 Country Road의 파란불의 주기보다 더욱 짧게 설정하였습니다. <br/>
 
 ### 2-3. 각 System 역할
 #### System 1. CLOCK
@@ -63,21 +62,21 @@ Country Road는 Main Highway에 비하여 교통량이 적습니다. <br/>
 
 #### System 2. TRAFFICLIGHT
 &nbsp;저희가 설계한 전체 시스템은 Main Highway의 통행량과 Country Road에 정차되어 있는 자동차 대수를 기반으로 신호등의 주기가 결정됩니다. <br/>
-이때 Main Highway의 교통량과 Country Road에 정차되어 있는 자동차의 대수는 신호등에 부착되어 있는 센서가 측정하여서 Controller에게 전달 시켜주도록 신호등을 모델링 하였다. <br/>
-즉, 신호등에는 Main Highway의 교통량을 측정해주는 센서와 10초 동안 Country Road 에 새로 정차하는 자동차 대수를 측정해주는 센서 2개가 존재한다. <br/>
+이때 Main Highway의 교통량과 Country Road에 정차되어 있는 자동차의 대수는 신호등에 부착되어 있는 센서가 측정하여서 CONTROLLER에게 전달 시켜주도록 신호등을 모델링 하였다. <br/>
+즉, 신호등에는 Main Highway의 교통량을 측정해주는 센서와 10초 동안 Country Road에 새로 정차하는 자동차 대수를 측정해주는 센서 2개가 존재합니다. <br/>
 
-&nbsp;기본적으로 Testbench를 처음 시작할 때 Memory1 에 저장되어 있는 누적 교통량은 전부 0으로 초기화 되어있는 상태이다. <br/>
-따라서 기본적으로 Setting 되어 있는 Main Highway 의 Green Light 의 주기는 3분이고 country road 의 green light 의 주기는 1 분이다. <br/>
+&nbsp;기본적으로 Testbench를 처음 시작할 때 MEMORY에 저장되어 있는 누적 교통량은 전부 0으로 초기화 되어있는 상태이다. <br/>
+따라서, 기본적으로 Setting 되어 있는 Main Highway 의 Green Light의 주기는 3분이고 Country Road의 Green Light의 주기는 1분이다. <br/>
 
-&nbsp;이 상태에서 신호등은 신호등에 부착되어 있는 main highway 의 교통량을 측정하는 센서를 통하여 main highway 의 교통량을 측정한다. <br/>
-Main highway 의 교통량을 측정하는 센서가 1 시간 동안 Main highway 의 현재 교통량을 측정하여서 1 시간 동안 측정된 교통량이 얼마나 많은 지 그 정도를 0 에서 4 까지 나누어 총 5 단계로 구분하여서 controller 에 전달하여 준다. <br/>
+&nbsp;이 상태에서 신호등은 신호등에 부착되어 있는 Main Highway의 교통량을 측정하는 센서를 통하여 Main Highway의 교통량을 측정합니다. <br/>
+Main highway의 교통량을 측정하는 센서가 1시간 동안 Main highway의 현재 교통량을 측정하여서 1시간 동안 측정된 교통량이 얼마나 많은 지 그 정도를 0에서 4까지 나누어 총 5단계로 구분하여서 CONTROLLER에 전달하여 줍니다. <br/>
 
-&nbsp;controller 에서 main highway 의 교통량을 받으면 memory1 과 rank_calculator 를 통해서 현재 시각이 하루 24 시간 중에서 교통량이 몇 순위인지 계산하여서 신호등에게 전달하여 준다. <br/>
-그러면 신호등은 현재 시각에 맞는 누적 교통량이 하루 24 시간 중에서 몇 위인지 전달받는다. <br/>
-그리고 이 순위를 기반으로 main highway 의 파란불 주기를 어떻게 할지 결정한다. <br/>
+&nbsp;CONTROLLER에서 Main Highway의 교통량을 받으면 MEMORY과 RANK_CALCULATOR를 통해서 현재 시각이 하루 24시간 중에서 교통량이 몇 순위인지 계산하여서 신호등에게 전달하여 줍니다. <br/>
+그러면, 신호등은 현재 시각에 맞는 누적 교통량이 하루 24시간 중에서 몇 위인지 전달받습니다. <br/>
+그리고, 이 순위를 기반으로 Main Highway의 파란불 주기를 어떻게 할지 결정합니다. <br/>
 
-&nbsp;신호등에 부착되어 있는 또 다른 센서는 main highway 가 파란 불일 때 country road 는 빨간 불이므로 신호등에 부착되어있는 센서는 10 초 동안 country road 에 새로 정차하는 자동차 대수를 센다. <br/>
-Main highway 의 파란 불 주기가 기본적으로 country road 의 파란 불 주기보다 훨씬 길기 때문에 country road 에 정차되어 있는 차량 대수가 많아질 때 도로가 막히는 현상을 해결해주기 위해서 이 기능을 추가했다. <br/>
+&nbsp;신호등에 부착되어 있는 또 다른 센서는 Main Highway가 파란 불일 때 Country Road는 빨간 불이므로 신호등에 부착되어있는 센서는 10초 동안 Country Road에 새로 정차하는 자동차 대수를 셉니다. <br/>
+Main highway의 파란 불 주기가 기본적으로 Country Road의 파란 불 주기보다 훨씬 길기 때문에 Country Road에 정차되어 있는 차량 대수가 많아질 때 도로가 막히는 현상을 해결해주기 위해서 이 기능을 추가했습니다. <br/>
 
 &nbsp;country road 에 정차되어 있는 차량 대수가 많아질 때 도로가 막히는 현상을 해결해주기 위해서 이 기능을 추가했다. <br/>
 
@@ -129,7 +128,7 @@ controller 로 부터는 누적 교통량을 받고 디지털 시계로 부터�
 ## 3. 각 System 설명
 ### System 1. CLOCK
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
   <img width="90%" alt="CLOCK Schematic" src="https://github.com/user-attachments/assets/7e2a6bd6-77ea-4219-9bc2-fe27b33bcc69" />
 </p>
 
