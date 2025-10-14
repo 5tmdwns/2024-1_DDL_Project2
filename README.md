@@ -13,6 +13,9 @@
   - [2-3. 각 System 역할](#각-System-역할) <br/>
 - [3. 각 System 설명](#각-System-설명) <br/>
 - [4. Module Verification](#Module-Verification) <br/>
+  - [4-1. Interface](#Interface) <br/>
+  - [4-2. Randomize Testbench Input](#Randomize-Testbench-Input) <br/>
+  - [4-3. Assertion(Immediate, Not Concurrent)](#Assertion/(Immdiate,-Not-Concurrent/)) <br/>
 - [5. Testbench Waveform](#Testbench-Waveform) <br/>
 - [6. 결론](#결론) <br/>
 
@@ -567,4 +570,132 @@ endmodule
 상위 5bit 에는 입력에 해당하는 현재 시각 정보가, 하위 5bit 에는 내부 logic 으로 저장된 rank 값이 할당 된다. <br/>
 따라서 입력이 존재한다면 현재 시각과 그에 해당하는 교통량의 순위가 10bit 로 구성되 출력으로 나온다. <br/>
 입력이 없는 경우 rank 에 내부 logic 으로 0 이 저장되어 있기 때문에 입력으로 들어오지 않은 시각의 순위는 0 으로 출력이 나타난다. <br/>
+
+## Module Verification
+### 1. Interface
+
+``` systemverilog
+interface SYSTEM_BUS (
+		      input logic CLK,
+		      input logic [2:0] MAIN_TRAFFIC,
+		      input logic [2:0] COUNTRY_TRAFFIC,
+		      output logic [1:0] COUNTRYLIGHT,
+		      output logic [1:0] MAINLIGHT
+		      );
+
+   logic 				 COUNTRY_PULSE = 0;
+   logic [1:0] 				 MAIN_LIGHT;
+   logic [2:0] 				 CURRENT_TRAFFIC_AMOUNT;
+   logic [2:0] 				 COUNTRY_CAR_NUM;
+   bit [4:0] 				 HOUR, LIGHT_RANK;
+   bit [5:0] 				 MINUTE, SECOND;
+   bit	 [14:0] 			 ACCUM_DATA1, ACCUM_DATA2;
+   bit	 [9:0] 				 TRAFFIC_RANKED_DATA [23:0];
+   bit	 [14:0] 				 TRAFFIC_DATA [23:0];
+   MEM_OP OP1;
+   MEM_OP OP2;
+...
+```
+
+&nbsp;위 신호등 시스템에서 Interface 를 통해서 연결한 것을 확인하면 신호등 내부에 수많은 데이터 정보의 흐름이 존재하지만, 우리가 관심있는 영역에 대해서 Interface 를 통해 묶고 나머지는 내부 변수로 처리했음을 알 수 있다. <br/>
+
+``` systemverilog
+...
+   modport CLOCK (
+		  input CLK,
+		  output HOUR, MINUTE, SECOND
+		  );
+
+   modport CONTROLLER (
+		       input MAIN_LIGHT, CURRENT_TRAFFIC_AMOUNT, COUNTRY_CAR_NUM, ACCUM_DATA2, HOUR, CLK, OP2,
+		       output COUNTRY_PULSE, LIGHT_RANK, ACCUM_DATA1, OP1
+		       );
+
+   modport TRAFFIC_LIGHT (
+			  input COUNTRY_PULSE, LIGHT_RANK, MAIN_TRAFFIC, COUNTRY_TRAFFIC, CLK,
+			  output MAINLIGHT, MAIN_LIGHT, COUNTRYLIGHT, CURRENT_TRAFFIC_AMOUNT, COUNTRY_CAR_NUM
+			  );
+
+   modport MEM (
+		 input HOUR, ACCUM_DATA1, TRAFFIC_RANKED_DATA, CLK, OP1, OP2,
+		 output TRAFFIC_DATA, ACCUM_DATA2
+		 );
+
+   modport RANK_CAL (
+		 input TRAFFIC_DATA, HOUR, MINUTE, SECOND, CLK, OP1,
+		 output TRAFFIC_RANKED_DATA, OP2
+		 );
+
+endinterface // SYSTEM_BUS
+```
+
+&nbsp;System Verilog 의 modport 는 Interface 의 특정 신호에 대한 접근 권한을 정의하는데 사용되며 이를 통해 인터페이스를 사용하는 모듈의 역할에 따라 신호의 입출력 방향을 명확히 설정할 수 있다. <br/>
+
+### 2. Randomize Testbench Input
+
+``` systemverilog
+...
+      for (int j = 0; j < 120; j ++) begin
+	 for (int i = 0; i < 120; i ++) begin
+	    COUNTRY_TRAFFIC = (PREV_TB_COUNTRY_TRAFFIC + 3'b001 + i) % 8;
+	    if (COUNTRY_TRAFFIC == PREV_TB_COUNTRY_TRAFFIC)
+	      COUNTRY_TRAFFIC = (COUNTRY_TRAFFIC + 3'b001) % 8;
+	    PREV_TB_COUNTRY_TRAFFIC = COUNTRY_TRAFFIC;
+	    #60;
+	 end
+	 MAIN_TRAFFIC = (PREV_TB_M_TRAFFIC + 3'b001 + j) % 5;
+	 if (MAIN_TRAFFIC == PREV_TB_M_TRAFFIC)
+	   MAIN_TRAFFIC = (MAIN_TRAFFIC + 3'b001) % 5;
+	 PREV_TB_M_TRAFFIC = MAIN_TRAFFIC;
+      end
+      #1000
+	$finish();
+   end
+```
+
+&nbsp;randomize 를 license 때문에 사용할 수 없기 때문에 임의로 randomize 하게 보이는 testbench 를 구현했다. <br/>
+이 system 에서는 2ns 를 1 초라고 정의하였다. <br/>
+120 까지 도는 for 문 2 개를 이용했는데 중첩하여 이용했다. <br/>
+내부 for 문에 60 의 delay 를 주어서 7200ns 즉 1 시간을 120 번 돌아서 5 일동안 동작하게 구현하였다. <br/>
+그리고 main 교통량을 구현할때 이전 교통량을 저장해두고 해당인덱스를 더하고 5 로 나누어서 0~4 까지로 교통량을 수치화하였다. <br/>
+이전 교통량에 인덱스를 더하고 나누어 주면서 testbench 를 실행했을때 무작위 처럼 보이는 교통량 입력을 주었다. <br/>
+
+### 3. Assertion(Immediate, Not Concurrent)
+
+&nbsp;sequential logic 을 사용한 시스템으로서, concurrent assertions 을 사용해야 하지만, license 문제로 인해 immediate assertions 을 사용해야만 했다. <br/>
+이는, combinational logic 을 위한 검증으로 본 시스템에는 다소 맞지 않다. <br/>
+
+&nbsp;아래는, 각 모듈에서 중요한 신호나 logic 을 위한 <span style="color:red">6 가지의 assertion</span> 이다. <br/>
+각각의 시스템은 이와같이 동작할 것을 암시한다. <br/>
+
+&nbsp;<strong><u>저희가 설계한 시스템은 아래와 같이 많은 assertion 을 이용함으로써 스마트한 검증이라는 설계 스펙에 최대한 부합하게 설계하였습니다.</strong></u> <br/>
+
+&nbsp;CONTROLLER : CHECK_PULSE, CHECK_ACCUM_DATA <br/>
+&nbsp;TRAFFICLIGHT : CHECK_FINAL_PULSE, CHECK_CNT <br/>
+&nbsp;MEMORY : CHECK_ACCUM_EQUAL <br/>
+&nbsp;RANK_CALCULATOR : CHECK_RANK <br/>
+
+#### 1. Memory Overflow
+
+<p center="align" style="margin: 20px 0;">
+	<img width="49%" alt="Memory Overflow Code Image1" src="https://github.com/user-attachments/assets/c5d2db38-c54b-44b2-b9ff-70c2714ee983" />
+	<img width="49%" alt="Memory Overflow Code Image2" src="https://github.com/user-attachments/assets/2f569fbe-8f99-4d76-a138-f0e1162e9b33" />
+</p>
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="Memory Overflow Log Image" src="https://github.com/user-attachments/assets/e2e3a9a5-7ae9-40f9-b09e-361ea9fefaf4" />
+</p>
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="Memory Overflow Waveform Image" src="https://github.com/user-attachments/assets/38fad131-5f5f-489c-b541-03eb9200a949" />
+</p>
+
+&nbsp;첫 번째 사진은 controller 모듈의 일부이다. <br/>
+controller 는 메모리가 controller 에게 주는 정보인 accum_data2 와 현재 main highway 의 traffic 정보인 current_traffic_amount 를 덧셈 연산하여 accum_data1 에 전달해 준다. <br/>
+이때 60~61 번째 줄을 확인하면 assert 구문의 활용을 볼 수 있다. <br/>
+해당 assert 구문은 교통량 정보를 축적하여 저장하는 메모리가 오버플로우 나는 경우를 탐지한다. <br/>
+테스트 벤치에서 강제로 current_traffic_amount 와 연결된 mainToCtrl 에 10’b1111111111 의 값을 넣어 주었고 fatal 에 의해서
+정지되었다. <br/>
+파형과 로그 확인 결과 세번째 사진의 62 번째 줄에 로그가 떠있는 것을 확인 할 수 있고 시뮬레이션 파형에서도 멈춘것을 확인 할 수 있다. <br/>
+
 
