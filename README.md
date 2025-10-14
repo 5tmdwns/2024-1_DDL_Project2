@@ -95,7 +95,7 @@ controller 의 기능은 총 2 개로 다음과 같다. <br/>
 #### System 4. Memory1
 
 <p style="margin: 20px 0;">
-  <img width="50%" alt="Memory1 Image" src="https://github.com/user-attachments/assets/80a66ed8-d673-4285-917d-f90060125a47" />
+  <img width="30%" alt="Memory1 Image" src="https://github.com/user-attachments/assets/80a66ed8-d673-4285-917d-f90060125a47" />
 </p>
 
 &nbsp;memory1 은 controller, 디지털 시계, rank_cal 3 개에서 모두 입력을 받는다. <br/>
@@ -106,7 +106,7 @@ controller 로 부터는 누적 교통량을 받고 디지털 시계로 부터�
 #### System 5. Rank_cal
 
 <p style="margin: 20px 0;">
-  <img width="50%" alt="Rank_cal Image" src="https://github.com/user-attachments/assets/daf162c2-07cd-4378-9257-3a4f8c8fe4d9" />
+  <img width="30%" alt="Rank_cal Image" src="https://github.com/user-attachments/assets/daf162c2-07cd-4378-9257-3a4f8c8fe4d9" />
 </p>
 
 &nbsp;Rank_cal 시스템은 Memory1 으로 부터 입력 15bit 를 받는다. <br/>
