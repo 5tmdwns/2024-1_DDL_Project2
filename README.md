@@ -16,8 +16,8 @@
   - [4-1. Interface](#4-1-Interface) <br/>
   - [4-2. Randomize Testbench Input](#4-2-Randomize-Testbench-Input) <br/>
   - [4-3. Assertion(Immediate, Not Concurrent)](#4-3-AssertionImmediate-Not-Concurrent) <br/>
-- [5. Testbench Waveform](#Testbench-Waveform) <br/>
-- [6. 결론](#결론) <br/>
+- [5. Testbench Waveform](#5-Testbench-Waveform) <br/>
+- [6. 결론](#6-결론) <br/>
 
 ## 1. 프로젝트 주제 및 목표
 &nbsp;본 프로젝트의 주제는 매 시간 마다 Main Highway 의 실시간 교통량과 Country road 에 정차되어있는 자동차 대수를 측정하여 이를 Memory1 에 저장하여 Memory1 에 저장 되어있는 누적교통량을 기반해서 탄력적으로 신호등의 주기를 조절하는 시스템을 구성하였습니다. <br/>
