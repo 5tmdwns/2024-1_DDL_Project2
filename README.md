@@ -698,4 +698,150 @@ controller 는 메모리가 controller 에게 주는 정보인 accum_data2 와 �
 정지되었다. <br/>
 파형과 로그 확인 결과 세번째 사진의 62 번째 줄에 로그가 떠있는 것을 확인 할 수 있고 시뮬레이션 파형에서도 멈춘것을 확인 할 수 있다. <br/>
 
+### 4-3-2. CHECK_PULSE, CHECK_FINAL_PULSE
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="CHECK_PULSE, CHECK_FINAL_PULSE Log Image" src="https://github.com/user-attachments/assets/37b6f0a6-3dbd-4659-bda7-ae0807eafbac" />
+</p>
+
+&nbsp;위의 time 은 1ns 의 기준이다. <br/>
+사진과 같이 CHECK_PULSE FAIL 이 45ns, CHECK_FINAL_PULSE FAIL 이 47ns 에서 발생한다. <br/>
+이는 concurrent assertion 으로 검증을 해야한다. <br/>
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="CHECK_PULSE, CHECK_FINAL_PULSE Waveform Image" src="https://github.com/user-attachments/assets/7bec4023-369c-4a53-bf59-851a4f3124a2" />
+</p>
+
+&nbsp;country road 의 누적 차량 대수가 30 이 이상이 됐을 시, pulse 가 발생하는 것을 알 수 있다. <br/>
+pulse 가 발생하고 다음 클락에 finalPulse 가 발생하게 되는데 선언한 assertion 은 클락의 기준이 아니므로, FAIL 이 뜰 수도 있고 PASS 가 뜰 수도 있다. <br/>
+
+### 4-3-3. CHECK_CNT
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="CEHCK_CNT Log Image" src="https://github.com/user-attachments/assets/16cd5ed6-ff07-4d95-b74c-1f8805828996" />
+</p>
+
+&nbsp;1269ns 에서 CNT PASS 가 발생한다. 이는 신호등의 주기를 세어주는 cnt 값이 360 이상이 되었다는 뜻이다. <br/>
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="CHECK_CNT Waveform Image" src="https://github.com/user-attachments/assets/4bcf8291-849e-4fd2-9ff2-7f24d11427fb" />
+</p>
+
+&nbsp;다음과 같은 사진을 보면, main highway 의 신호등이 파란불이 되는 시기부터 1269ns 까지는 신호등의 초록불 주기가 기본주기인 것이다. <br/>
+이는 우선순위 light_rank 를 trafficLight 모듈이 받았으므로, 기본주기보다 훨씬 더 길어진 것이다. <br/>
+
+### 4-3-4. CHECK_ACCUM_EQUAL, CHECK_RANK
+
+<p style="margin: 20px 0;">
+	<img width="40%" alt="CHECK_ACCUM_EQUAL, CHECK_RANK Log Image" src="https://github.com/user-attachments/assets/cf869d6d-2f70-4d2d-bbe0-a8da6756c360" />
+</p>
+
+&nbsp;위의 사진을 보면, CHECK_RANK PASS 가 9ns 에서 발생하고, CHECK_RANK PASS 가 11ns 에서 발생하는 것을 알 수 있다. <br/>
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="CHECK_ACCUM_EQUAL, CHECK_RANK Waveform Image1" src="https://github.com/user-attachments/assets/91c70790-3b24-4bbc-95d7-f283bfdca544" />
+</p>
+
+&nbsp;9ns 에서의 accum_data1[9:0]과 accum_data2[14:5]의 누적 교통량 수가 같아짐을 알 수 있다. <br/>
+이는 memory 와 rank_calculator 모듈이 정상 동작을 한다는 것을 알 수 있다. <br/>
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="CHECK_ACCUM_EQUAL, CHECK_RANK Waveform Image2" src="https://github.com/user-attachments/assets/84d936e4-dea5-4fa8-9d29-960b6b641a42" />
+</p>
+
+&nbsp;op1 == read 상태일 때, traffic_ranked_data[i4.hour][4:0]를 내보내는지를 나타낸다. <br/>
+이는 light_rank 이므로 신호등 주기를 변경해주는 우선순위이다. <br/>
+15ns 에서의 light_rank 가 정상적으로 rank_calculator 로부터 trafficLight 모듈로 5 순위가 전달해왔다는 것을 알 수 있다. <br/>
+
+### 4-3-5. CHECK_ACCUM_DATA
+
+<p style="margin: 20px 0;">
+	<img width="40%" height="219" alt="CHECK_ACCUM_DATA Log Image" src="https://github.com/user-attachments/assets/418accaa-cf5d-441d-a71c-c9d1677343d2" />
+</p>
+
+&nbsp;CHECK_ACCUM_DATA 가 194445ns 에서 발생한다. <br/>
+이는 다음날 accum_data1 과 accum_data2 에 main highway 에서의 교통량이 누적이 잘 됐는지를 나타낸다. <br/>
+
+<p center="align" style="margin: 20px 0;">
+	<img width="49%" alt="CHECK_ACCUM_DATA Waveform Image1" src="https://github.com/user-attachments/assets/ec1e91d2-7c9b-432f-86ec-cf316dbe9b2d" />
+	<img width="49%" alt="CHECK_ACCUM_DATA Waveform Image2" src="https://github.com/user-attachments/assets/9e80f2de-c565-4c91-b306-2482d580dc93" />
+</p>
+
+&nbsp;위 두사진에서 accum_data1,2 의 값을 보면, 전날 3 시에 입력된 교통량은 1 이고, 다음날 3 시에 입력된 교통량은 3 이다. <br/>
+이를 통해, accum_data 의 값은 4 를 나타낼 것이고 이는 테스트 벤치에서도 잘 보여준다. <br/>
+
+## 5. Testbench Waveform
+### 5-1. Traffic Input
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="Traffic Input Waveform Image" src="https://github.com/user-attachments/assets/bc82876a-8f9a-4b3c-9239-4708a25ae050" />
+</p>
+
+&nbsp;위의 변수는 country_traffic 으로 30 초마다 한번 country road 쪽에서 오는 교통량을 받는다. <br/>
+아래 변수는 main_traffic 으로 한시간에 한번 main highway 의 교통량을 받는다. <br/>
+파형을 확인하면 7200ns 뒤에 다음 시간의 교통량을 받는 것을 확인 할 수 있다. <br/>
+
+### 5-2. Base Light Period
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="Base Light Period Waveform Image" src="https://github.com/user-attachments/assets/f8f4dda8-dcff-46d1-88bb-ae0eec815506" />
+</p>
+
+&nbsp;맨위의 변수는 해당 시간대의 순위이다. 
+0 순위는 아직 테스트 벤치에 교통량이 입력되기 전이므로 메모리 1 의 누적교통량이 전부 0 이기 때문에 이 상황을 표현하기 위해 모든 시간대의 순위가 0 순위이다. <br/>
+0 순위 일때는 main highway 의 파란불 주기와 country road 의 파란불 주기가 각각 기본 setting 되어있는 3 분, 1 분이다. <br/>
+이는 테스트 벤치의 맨 처음의 상황이 traffic 에 따라 영향을 받지않았기 때문이다. <br/>
+따라서 간격이 720ns 인 것을 볼 수 있다. <br/>
+
+### 5-3. Country Road 데이터 축적 및 신호 강제 변경
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="Country Road Waveform image" src="https://github.com/user-attachments/assets/b70349cc-5606-40d7-83e8-58344bd3e910" />
+</p>
+
+&nbsp;먼저 country traffic 의 축적된 data 를 보면 country road 의 신호등이 맨아래 변수이다. <br/>
+country road 가 초록불 일때는 country traffic 에 데이터가 축적되지 않고 빨간불 일때만 데이터가 축적 됨을 볼 수 있다. <br/>
+그리고 traffic 이 쌓여서 30 을 넘게 되면 넘었다는 것을 알려주는 pulse 신호가 생성되고 country 의 traffic signal 이 바로 초록불로 바뀌게 된다. <br/>
+
+### 5-4. Traffic Rank
+
+<p center="align" style="margin: 20px 0;">
+	<img width="49%" alt="Traffic Rank Waveform Image 1" src="https://github.com/user-attachments/assets/564bb0a9-7409-4261-81d3-ca9fc6a3eb2b" />
+	<img width="49%" alt="Traffic Rank Waveform Image 2" src="https://github.com/user-attachments/assets/cf279caf-266f-4ec7-a54a-be75729ffe7a" />
+</p>
+
+&nbsp;맨아래 데이터 변수는 앞의 10 비트는 누적 교통량 뒤의 5 비트는 순위이다. <br/>
+그림에는 누적 교통량을 decimal 로 적어 두었다. <br/>
+누적교통량이 제일큰 20 시가 1 의 rank 를 갖고 누적교통량이 가장 작은 5 시와 23 시가 8 위의 rank 를 갖는 것을 확인 할 수 있다. <br/>
+
+### 5-5. Light Period by Accumulated Traffic
+
+<p center="align" style="margin: 20px 0;">
+	<img width="49%" alt="LPbAT Waveform Image 1" src="https://github.com/user-attachments/assets/ece29f01-b7fb-4059-9717-8b4f4cce28f4" />
+	<img width="49%" alt="LPbAT Waveform Image 2" src="https://github.com/user-attachments/assets/b278a550-c377-4407-bd6a-90cfde91406a" />
+</p>
+
+&nbsp;첫번째 그림은 1 위 traffic light 의 시간간격으로 1800ns 정도이고 두번째 그림은 7 위 traffic light 의 시간간격으로 750ns 정도이다. <br/>
+이렇게 교통량에 따라서 순위가 결정되고 결정된 순위에 따라 main highway 에 얼마나 오래 초록불을 줄 것이냐가 결정되는 것을 확인할 수 있다. <br/>
+
+## 6 . 결론
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="결론 Waveform Image 1" src="https://github.com/user-attachments/assets/9285302d-8fca-4ef1-b0d3-234b6da39503" />
+</p>
+
+&nbsp;위와같이 country highway 에 누적된 차량 대수가 30 이상이 넘어가면, country highway 에 초록불을 주는 것을 볼 수 있다. <br/>
+
+<p center="align" style="margin: 20px 0;">
+	<img width="49%" alt="결론 Waveform Image 2" src="https://github.com/user-attachments/assets/f610c063-c190-42d7-972a-372c0935d627" />
+	<img width="49%" alt="결론 Waveform Image 3" src="https://github.com/user-attachments/assets/ad73c7bb-069f-4e6a-bf80-64cba55b1701" />
+</p>
+
+&nbsp;가장 아래의 파형은 신호등 주기를 변경해주는 교통량 우선순위이고, 그 위의 파형은 흘러가는 시간을 나타낸다. <br/>
+[0]이 main hightway 의 초록불을 나타내는데, 이는 시간마다 우선순위가 주어질 때마다, 주기가 변함을 알 수 있다. <br/>
+
+&nbsp;따라서, interface 와 assertion 을 활용한 4 가지 이상의 협업하는 시스템을 설계 해보았다. <br/>
+이는 사거리 신호등 교통체제의 시스템으로 교통량을 누적하여 우선순위를 부여하여, 시간마다의 신호등 주기를 조절하여, 교통체제를 다소 원활하게 할 수 있을 것이라고 예상한다. <br/>
+
+
 
