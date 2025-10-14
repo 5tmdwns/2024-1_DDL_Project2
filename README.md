@@ -16,7 +16,17 @@
   - [4-1. Interface](#4-1-Interface) <br/>
   - [4-2. Randomize Testbench Input](#4-2-Randomize-Testbench-Input) <br/>
   - [4-3. Assertion(Immediate, Not Concurrent)](#4-3-AssertionImmediate-Not-Concurrent) <br/>
+  	- [4-3-1. Memory Overflow](#4-3-1-Memory-Overflow) <br/>
+	- [4-3-2. CHECK_PULSE, CHECK_FINAL_PULSE](#4-3-2-CHECK_PULSE-CHECK_FINAL_PULSE) <br/>
+	- [4-3-3. CEHCK_CNT](#4-3-3-CHECK_CNT) <br/>
+	- [4-3-4. CHECK_ACCUM_EQUAL, CHECK_RANK](#4-3-4-CHECK_ACCUM_EQUAL-CHECK_RANK) <br/>
+	- [4-3-5. CHECK_ACCUM_DATA](#4-3-5-CHECK_ACCUM_DATA) <br/>
 - [5. Testbench Waveform](#5-Testbench-Waveform) <br/>
+  - [5-1. Traffic Inpu](#5-1-Traffic-Input) <br/>
+  - [5-2. Base Light Period](#5-2-Base-Light-Period) <br/>
+  - [5-3. Country Road 데이터 축적 및 신호 강제 변경](#5-3-Country-Road-데이터-축적-및-신호-강제-변경) <br/>
+  - [5-4. Traffic Rank](#5-4-Traffic-Rank) <br/>
+  - [5-5. Light Period by Accumulated Traffic](#5-5-Light-Period-by-Accumulated-Traffic) <br/>
 - [6. 결론](#6-결론) <br/>
 
 ## 1. 프로젝트 주제 및 목표
@@ -698,7 +708,7 @@ controller 는 메모리가 controller 에게 주는 정보인 accum_data2 와 �
 정지되었다. <br/>
 파형과 로그 확인 결과 세번째 사진의 62 번째 줄에 로그가 떠있는 것을 확인 할 수 있고 시뮬레이션 파형에서도 멈춘것을 확인 할 수 있다. <br/>
 
-### 4-3-2. CHECK_PULSE, CHECK_FINAL_PULSE
+#### 4-3-2. CHECK_PULSE, CHECK_FINAL_PULSE
 
 <p center="align" style="margin: 20px 0;">
 	<img width="90%" alt="CHECK_PULSE, CHECK_FINAL_PULSE Log Image" src="https://github.com/user-attachments/assets/37b6f0a6-3dbd-4659-bda7-ae0807eafbac" />
@@ -715,7 +725,7 @@ controller 는 메모리가 controller 에게 주는 정보인 accum_data2 와 �
 &nbsp;country road 의 누적 차량 대수가 30 이 이상이 됐을 시, pulse 가 발생하는 것을 알 수 있다. <br/>
 pulse 가 발생하고 다음 클락에 finalPulse 가 발생하게 되는데 선언한 assertion 은 클락의 기준이 아니므로, FAIL 이 뜰 수도 있고 PASS 가 뜰 수도 있다. <br/>
 
-### 4-3-3. CHECK_CNT
+#### 4-3-3. CHECK_CNT
 
 <p center="align" style="margin: 20px 0;">
 	<img width="90%" alt="CEHCK_CNT Log Image" src="https://github.com/user-attachments/assets/16cd5ed6-ff07-4d95-b74c-1f8805828996" />
@@ -730,7 +740,7 @@ pulse 가 발생하고 다음 클락에 finalPulse 가 발생하게 되는데 �
 &nbsp;다음과 같은 사진을 보면, main highway 의 신호등이 파란불이 되는 시기부터 1269ns 까지는 신호등의 초록불 주기가 기본주기인 것이다. <br/>
 이는 우선순위 light_rank 를 trafficLight 모듈이 받았으므로, 기본주기보다 훨씬 더 길어진 것이다. <br/>
 
-### 4-3-4. CHECK_ACCUM_EQUAL, CHECK_RANK
+#### 4-3-4. CHECK_ACCUM_EQUAL, CHECK_RANK
 
 <p style="margin: 20px 0;">
 	<img width="40%" alt="CHECK_ACCUM_EQUAL, CHECK_RANK Log Image" src="https://github.com/user-attachments/assets/cf869d6d-2f70-4d2d-bbe0-a8da6756c360" />
@@ -753,7 +763,7 @@ pulse 가 발생하고 다음 클락에 finalPulse 가 발생하게 되는데 �
 이는 light_rank 이므로 신호등 주기를 변경해주는 우선순위이다. <br/>
 15ns 에서의 light_rank 가 정상적으로 rank_calculator 로부터 trafficLight 모듈로 5 순위가 전달해왔다는 것을 알 수 있다. <br/>
 
-### 4-3-5. CHECK_ACCUM_DATA
+#### 4-3-5. CHECK_ACCUM_DATA
 
 <p style="margin: 20px 0;">
 	<img width="40%" height="219" alt="CHECK_ACCUM_DATA Log Image" src="https://github.com/user-attachments/assets/418accaa-cf5d-441d-a71c-c9d1677343d2" />
