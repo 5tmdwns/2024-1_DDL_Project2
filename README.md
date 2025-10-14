@@ -123,9 +123,4 @@ controller 로 부터는 누적 교통량을 받고 디지털 시계로 부터�
 &nbsp;Clock 모듈은 시간 값을 출력한다. Clk 을 받아서 시간을 생성하고 각 모듈에 시간 값을 뿌려준다.
 다른 모듈들은 그 시간 값을 참고하여 값을 저장하거나 traffic 을 통제한다.
 
-``` verilog
-  always_ff @(posedge CLK or negedge RSTN) begin
-    if (!RSTN) begin
-    
-  end
-```
+&nbsp;<strong>전용면적: 5859.13 um</strong>
