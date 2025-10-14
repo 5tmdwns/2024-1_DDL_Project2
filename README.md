@@ -15,7 +15,7 @@
 - [4. Module Verification](#Module-Verification) <br/>
   - [4-1. Interface](#1-Interface) <br/>
   - [4-2. Randomize Testbench Input](#2-Randomize-Testbench-Input) <br/>
-  - [4-3. Assertion(Immediate, Not Concurrent)](#3-AssertionImmdiate--Not-Concurrent) <br/>
+  - [4-3. Assertion(Immediate, Not Concurrent)](#3-AssertionImmediate-Not-Concurrent) <br/>
 - [5. Testbench Waveform](#Testbench-Waveform) <br/>
 - [6. 결론](#결론) <br/>
 
