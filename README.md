@@ -38,31 +38,31 @@
 ## 2. 프로젝트 설계 및 구성
 ### 2-1. Circuit Diagram
 <p align="center" style="margin: 20px 0;">
-  <img width="90%" alt="Circuit Diagram" src="https://github.com/user-attachments/assets/dac83661-b667-426d-81ba-236f7f80f53c" />
+  <img width="100%" alt="Circuit Diagram" src="https://github.com/user-attachments/assets/dac83661-b667-426d-81ba-236f7f80f53c" />
 </p>
 
 ### 2-2. System Description
-&nbsp;우리가 만든 신호등 시스템은 총 다섯개의 system 이 상호작용한다. <br/>
-다섯개의 시스템은 디지털 시계, 신호등, controller, memory, rank_calculator 로 구성된다. <br/>
+&nbsp;해당 신호등 시스템은 총 다섯개의 system이 상호작용합니다. <br/>
+다섯개의 시스템은 CLOCK, TRAFFICLIGHT, CONTROLLER, MEMORY, RANK_CALCULATOR로 구성된다. <br/>
 각각의 역할은 다음과 같다. <br/>
 
 <p align="center" style="margin: 20px 0;">
   <img width="90%" alt="Highway Image" src="https://github.com/user-attachments/assets/09e4ac0a-0f78-4d41-b25a-765b1f56c4fb" />
 </p>
 
-&nbsp;우리는 4 거리를 모델링 하여서 4 거리에 적용할 수 있는 신호등 시스템을 설계하였다. <br/>
-기본적으로 우리가 모델링한 4 거리는 Main Highway 와 Country Road 2 개의 도로가 교차 되어있다. <br/>
-Main Highway 는 고속도로의 개념으로 기본적으로 통행량이 많다. <br/>
-Country Road 는 Main Highway 에 비하여 교통량이 적다. <br/>
-따라서 Main Highway 의 파란불의 주기는 Country Road 의 파란불의 주기보다 더욱 짧게 설정하였다. <br/>
+&nbsp;저희는 4거리를 모델링 하여서 4거리에 적용할 수 있는 신호등 시스템을 설계하였습니다. <br/>
+기본적으로 저희가 모델링한 4거리는 Main Highway와 Country Road 2개의 도로가 교차 되어있습니다. <br/>
+Main Highway는 고속도로의 개념으로 기본적으로 통행량이 많습니다. <br/>
+Country Road는 Main Highway에 비하여 교통량이 적습니다. <br/>
+따라서 Main Highway의 파란불의 주기는 Country Road의 파란불의 주기보다 더욱 짧게 설정하였습니다. <br/>
 
 ### 2-3. 각 System 역할
 #### System 1. CLOCK
-&nbsp;디지털 시계는 Controller, Memory에 시각 정보를 주어서 우리가 설계한 전체 시스템의 기준이 되는 시각정보를 제공하여 준다. <br/>
-따라서 Controller 와 Memory 는 디지털 시계에서 제공해준 시간을 기준으로 신호등에 현재 시간대의 누적 교통량에 해당하는 주기를 결정한다. <br/>
+&nbsp;CLOCK은 CONTROLLER, MEMORY에 시각 정보를 주어서 우리가 설계한 전체 시스템의 기준이 되는 시각정보를 제공하여 줍니다. <br/>
+따라서, CONTROLLER와 MEMORY는 디지털 시계에서 제공해준 시간을 기준으로 신호등에 현재 시간대의 누적 교통량에 해당하는 주기를 결정합니다. <br/>
 
 #### System 2. TRAFFICLIGHT
-&nbsp;우리가 설계한 전체 시스템은 Main Highway의 통행량과 Country Road에 정차되어 있는 자동차 대수를 기반으로 신호등의 주기가 결정된다. <br/>
+&nbsp;저희가 설계한 전체 시스템은 Main Highway의 통행량과 Country Road에 정차되어 있는 자동차 대수를 기반으로 신호등의 주기가 결정됩니다. <br/>
 이때 Main Highway의 교통량과 Country Road에 정차되어 있는 자동차의 대수는 신호등에 부착되어 있는 센서가 측정하여서 Controller에게 전달 시켜주도록 신호등을 모델링 하였다. <br/>
 즉, 신호등에는 Main Highway의 교통량을 측정해주는 센서와 10초 동안 Country Road 에 새로 정차하는 자동차 대수를 측정해주는 센서 2개가 존재한다. <br/>
 
@@ -195,7 +195,7 @@ SECOND, MINUTE, HOUR(Output) : 시간, 분, 초의 각각의 Output 이다. <br/
 
 ### System 2. TRAFFICLIGHT
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
   <img width="90%" alt="TRAFFICLIGHT Schematic" src="https://github.com/user-attachments/assets/1a84d8fc-e231-4a68-be32-908b0f1dff72" />
 </p>
 
@@ -346,7 +346,7 @@ country highway 의 노란불 -> 다음 클락에 S0 로 이동하도록 설계.
 
 ### System 3. CONTROLLER
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
   <img width="90%" alt="CONTROLLER Schematic" src="https://github.com/user-attachments/assets/53c4ec59-86e8-4042-956c-8d0788d1f56c" />
 </p>
 
@@ -452,7 +452,7 @@ module CONTROLLER (SYSTEM_BUS.CONTROLLER i1);
 
 ### System 4. MEMORY
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="MEMORY Schematic" src="https://github.com/user-attachments/assets/0345ca4f-2463-46a6-80ba-f28a7566c457" />
 </p>
 
@@ -520,7 +520,7 @@ op2 가 WRITE 인 경우, 모든 시간대에 대해 교통량 순위 데이터�
 
 ### System 5. RANK_CALCULATOR
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="RANK_CALCULATOR Schematic" src="https://github.com/user-attachments/assets/92a25f97-47a5-495f-89c4-9f8aee886155" />
 </p>
 
@@ -687,12 +687,12 @@ endinterface // SYSTEM_BUS
 
 #### 4-3-1. Memory Overflow
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="49%" alt="Memory Overflow Code Image1" src="https://github.com/user-attachments/assets/c5d2db38-c54b-44b2-b9ff-70c2714ee983" />
 	<img width="49%" alt="Memory Overflow Code Image2" src="https://github.com/user-attachments/assets/2f569fbe-8f99-4d76-a138-f0e1162e9b33" />
 </p>
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="Memory Overflow Log Image" src="https://github.com/user-attachments/assets/e2e3a9a5-7ae9-40f9-b09e-361ea9fefaf4" />
 </p>
 
@@ -710,7 +710,7 @@ controller 는 메모리가 controller 에게 주는 정보인 accum_data2 와 �
 
 #### 4-3-2. CHECK_PULSE, CHECK_FINAL_PULSE
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="CHECK_PULSE, CHECK_FINAL_PULSE Log Image" src="https://github.com/user-attachments/assets/37b6f0a6-3dbd-4659-bda7-ae0807eafbac" />
 </p>
 
@@ -718,7 +718,7 @@ controller 는 메모리가 controller 에게 주는 정보인 accum_data2 와 �
 사진과 같이 CHECK_PULSE FAIL 이 45ns, CHECK_FINAL_PULSE FAIL 이 47ns 에서 발생한다. <br/>
 이는 concurrent assertion 으로 검증을 해야한다. <br/>
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="CHECK_PULSE, CHECK_FINAL_PULSE Waveform Image" src="https://github.com/user-attachments/assets/7bec4023-369c-4a53-bf59-851a4f3124a2" />
 </p>
 
@@ -727,13 +727,13 @@ pulse 가 발생하고 다음 클락에 finalPulse 가 발생하게 되는데 �
 
 #### 4-3-3. CHECK_CNT
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="CEHCK_CNT Log Image" src="https://github.com/user-attachments/assets/16cd5ed6-ff07-4d95-b74c-1f8805828996" />
 </p>
 
 &nbsp;1269ns 에서 CNT PASS 가 발생한다. 이는 신호등의 주기를 세어주는 cnt 값이 360 이상이 되었다는 뜻이다. <br/>
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="CHECK_CNT Waveform Image" src="https://github.com/user-attachments/assets/4bcf8291-849e-4fd2-9ff2-7f24d11427fb" />
 </p>
 
@@ -748,14 +748,14 @@ pulse 가 발생하고 다음 클락에 finalPulse 가 발생하게 되는데 �
 
 &nbsp;위의 사진을 보면, CHECK_RANK PASS 가 9ns 에서 발생하고, CHECK_RANK PASS 가 11ns 에서 발생하는 것을 알 수 있다. <br/>
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="CHECK_ACCUM_EQUAL, CHECK_RANK Waveform Image1" src="https://github.com/user-attachments/assets/91c70790-3b24-4bbc-95d7-f283bfdca544" />
 </p>
 
 &nbsp;9ns 에서의 accum_data1[9:0]과 accum_data2[14:5]의 누적 교통량 수가 같아짐을 알 수 있다. <br/>
 이는 memory 와 rank_calculator 모듈이 정상 동작을 한다는 것을 알 수 있다. <br/>
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="CHECK_ACCUM_EQUAL, CHECK_RANK Waveform Image2" src="https://github.com/user-attachments/assets/84d936e4-dea5-4fa8-9d29-960b6b641a42" />
 </p>
 
@@ -772,7 +772,7 @@ pulse 가 발생하고 다음 클락에 finalPulse 가 발생하게 되는데 �
 &nbsp;CHECK_ACCUM_DATA 가 194445ns 에서 발생한다. <br/>
 이는 다음날 accum_data1 과 accum_data2 에 main highway 에서의 교통량이 누적이 잘 됐는지를 나타낸다. <br/>
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="49%" alt="CHECK_ACCUM_DATA Waveform Image1" src="https://github.com/user-attachments/assets/ec1e91d2-7c9b-432f-86ec-cf316dbe9b2d" />
 	<img width="49%" alt="CHECK_ACCUM_DATA Waveform Image2" src="https://github.com/user-attachments/assets/9e80f2de-c565-4c91-b306-2482d580dc93" />
 </p>
@@ -783,7 +783,7 @@ pulse 가 발생하고 다음 클락에 finalPulse 가 발생하게 되는데 �
 ## 5. Testbench Waveform
 ### 5-1. Traffic Input
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="Traffic Input Waveform Image" src="https://github.com/user-attachments/assets/bc82876a-8f9a-4b3c-9239-4708a25ae050" />
 </p>
 
@@ -793,7 +793,7 @@ pulse 가 발생하고 다음 클락에 finalPulse 가 발생하게 되는데 �
 
 ### 5-2. Base Light Period
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="Base Light Period Waveform Image" src="https://github.com/user-attachments/assets/f8f4dda8-dcff-46d1-88bb-ae0eec815506" />
 </p>
 
@@ -805,7 +805,7 @@ pulse 가 발생하고 다음 클락에 finalPulse 가 발생하게 되는데 �
 
 ### 5-3. Country Road 데이터 축적 및 신호 강제 변경
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="Country Road Waveform image" src="https://github.com/user-attachments/assets/b70349cc-5606-40d7-83e8-58344bd3e910" />
 </p>
 
@@ -815,7 +815,7 @@ country road 가 초록불 일때는 country traffic 에 데이터가 축적되�
 
 ### 5-4. Traffic Rank
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="49%" alt="Traffic Rank Waveform Image 1" src="https://github.com/user-attachments/assets/564bb0a9-7409-4261-81d3-ca9fc6a3eb2b" />
 	<img width="49%" alt="Traffic Rank Waveform Image 2" src="https://github.com/user-attachments/assets/cf279caf-266f-4ec7-a54a-be75729ffe7a" />
 </p>
@@ -826,7 +826,7 @@ country road 가 초록불 일때는 country traffic 에 데이터가 축적되�
 
 ### 5-5. Light Period by Accumulated Traffic
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="49%" alt="LPbAT Waveform Image 1" src="https://github.com/user-attachments/assets/ece29f01-b7fb-4059-9717-8b4f4cce28f4" />
 	<img width="49%" alt="LPbAT Waveform Image 2" src="https://github.com/user-attachments/assets/b278a550-c377-4407-bd6a-90cfde91406a" />
 </p>
@@ -834,15 +834,15 @@ country road 가 초록불 일때는 country traffic 에 데이터가 축적되�
 &nbsp;첫번째 그림은 1 위 traffic light 의 시간간격으로 1800ns 정도이고 두번째 그림은 7 위 traffic light 의 시간간격으로 750ns 정도이다. <br/>
 이렇게 교통량에 따라서 순위가 결정되고 결정된 순위에 따라 main highway 에 얼마나 오래 초록불을 줄 것이냐가 결정되는 것을 확인할 수 있다. <br/>
 
-## 6 . 결론
+## 6. 결론
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="90%" alt="결론 Waveform Image 1" src="https://github.com/user-attachments/assets/9285302d-8fca-4ef1-b0d3-234b6da39503" />
 </p>
 
 &nbsp;위와같이 country highway 에 누적된 차량 대수가 30 이상이 넘어가면, country highway 에 초록불을 주는 것을 볼 수 있다. <br/>
 
-<p center="align" style="margin: 20px 0;">
+<p align="center" style="margin: 20px 0;">
 	<img width="49%" alt="결론 Waveform Image 2" src="https://github.com/user-attachments/assets/f610c063-c190-42d7-972a-372c0935d627" />
 	<img width="49%" alt="결론 Waveform Image 3" src="https://github.com/user-attachments/assets/ad73c7bb-069f-4e6a-bf80-64cba55b1701" />
 </p>
