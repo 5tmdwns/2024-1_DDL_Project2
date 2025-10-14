@@ -203,8 +203,8 @@ SECOND, MINUTE, HOUR(Output) : 시간, 분, 초의 각각의 Output 입니다. <
 ``` systemverilog
 module TRAFFICLIGHT(SYSTEM_BUS.TRAFFIC_LIGHT i2);
 
+   typedef enum logic [1:0] {RED = 2'b00, GREEN, YELLOW} LIGHTSTATE;
    enum logic [1:0] {S0 = 2'b00, S1, S2, S3} STATE;
-	typedef enum logic [1:0] {RED = 2'b00, GREEN, YELLOW} LIGHTSTATE;
    logic PREV_PULSE, FINAL_PULSE, MAIN_CNT_ENABLE, CNTRY_CNT_ENABLE = 1'b0;
    logic [8:0] CNT = 0;
 
@@ -215,12 +215,12 @@ module TRAFFICLIGHT(SYSTEM_BUS.TRAFFIC_LIGHT i2);
 
 &nbsp;내부에서 사용하는 Logic은 다음과 같습니다. <br/>
 
-- typedef enum logic [1:0] {RED = 2’b00, GREEN, YELLO} lightState : FSM 을 쉽게 사용하기 위한 열거형 type 선언. <br/>
-- enum logic [2:0] {S0 = 2’b00, S1, S2, S3} state : state 는 FSM 을 이용하여 main highway 와 country highway 의 신호등을 결정. <br/>
-- prevPulse : controller 에서 받아오는 펄스를 저장. <br/>
-- finalPulse : prevPulse 를 이용하여 1 을 띄우게 함. <br/>
-- mainCntEnable : main highway 의 초록불의 주기를 clock 에 따라 count 하기 위해 필요한 신호. <br/>
-- cntryCntEnable : country highway 의 초록불의 주기를 clock 에 따라 count 하기 위해 필요한 신호. <br/>
+- typedef enum logic [1:0] {RED = 2’b00, GREEN, YELLO} LIGHTSTATE : FSM 을 쉽게 사용하기 위한 열거형 type 선언. <br/>
+- enum logic [2:0] {S0 = 2’b00, S1, S2, S3} STATE : state 는 FSM 을 이용하여 main highway 와 country highway 의 신호등을 결정. <br/>
+- PREV_PULSE : CONTROLLER에서 받아오는 펄스를 저장. <br/>
+- FINAL_PULSE : PREV_PULSE를 이용하여 1을 띄우게 함. <br/>
+- MAIN_CNT_ENABLE : Main Highway의 초록불의 주기를 Clock에 따라 Count 하기 위해 필요한 신호. <br/>
+- CNTRY_CNT_ENABLE : Country Highway의 초록불의 주기를 Clock에 따라 Count 하기 위해 필요한 신호. <br/>
 
 ``` systemverilog
    always_ff @(posedge i2.CLK) begin
