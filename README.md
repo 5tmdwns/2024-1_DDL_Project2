@@ -6,16 +6,16 @@
 </p>
 
 ## Index ⭐️
-- [1. 프로젝트 주제 및 목표](#프로젝트-주제-및-목표) <br/>
-- [2. 프로젝트 설계 및 구성](#프로젝트-설계-및-구성) <br/>
-  - [2-1. Circuit Diagram](#Circuit-Diagram) <br/>
-  - [2-2. System Description](#System-Description) <br/>
-  - [2-3. 각 System 역할](#각-System-역할) <br/>
-- [3. 각 System 설명](#각-System-설명) <br/>
-- [4. Module Verification](#Module-Verification) <br/>
-  - [4-1. Interface](#1-Interface) <br/>
-  - [4-2. Randomize Testbench Input](#2-Randomize-Testbench-Input) <br/>
-  - [4-3. Assertion(Immediate, Not Concurrent)](#3-AssertionImmediate-Not-Concurrent) <br/>
+- [1. 프로젝트 주제 및 목표](#1-프로젝트-주제-및-목표) <br/>
+- [2. 프로젝트 설계 및 구성](#2-프로젝트-설계-및-구성) <br/>
+  - [2-1. Circuit Diagram](#2-1-Circuit-Diagram) <br/>
+  - [2-2. System Description](#2-2-System-Description) <br/>
+  - [2-3. 각 System 역할](#2-3-각-System-역할) <br/>
+- [3. 각 System 설명](#3-각-system-설명) <br/>
+- [4. Module Verification](#4-Module-Verification) <br/>
+  - [4-1. Interface](#4-1-Interface) <br/>
+  - [4-2. Randomize Testbench Input](#4-2-Randomize-Testbench-Input) <br/>
+  - [4-3. Assertion(Immediate, Not Concurrent)](#4-3-AssertionImmediate-Not-Concurrent) <br/>
 - [5. Testbench Waveform](#Testbench-Waveform) <br/>
 - [6. 결론](#결론) <br/>
 
@@ -25,13 +25,13 @@
 이때, 모듈간의 연결을 System Verilog 의 Interface 기능을 이용해 각 모듈이, 그리고 합친 전체 신호등 시스템이 모두 잘 작동하는지 확인하였습니다. <br/>
 또한, 이런 확인 및 검증과정에서 System Verilog 의 Assertion 등을 활용해 다양한 입력 패턴을 이용해 Test Bench 를 작성해 시스템의 응답을 확인하였습니다. <br/>
 
-## 프로젝트 설계 및 구성
-### Circuit Diagram
+## 2. 프로젝트 설계 및 구성
+### 2-1. Circuit Diagram
 <p align="center" style="margin: 20px 0;">
   <img width="90%" alt="Circuit Diagram" src="https://github.com/user-attachments/assets/dac83661-b667-426d-81ba-236f7f80f53c" />
 </p>
 
-### System Description
+### 2-2. System Description
 &nbsp;우리가 만든 신호등 시스템은 총 다섯개의 system 이 상호작용한다. <br/>
 다섯개의 시스템은 디지털 시계, 신호등, controller, memory, rank_calculator 로 구성된다. <br/>
 각각의 역할은 다음과 같다. <br/>
@@ -46,7 +46,7 @@ Main Highway 는 고속도로의 개념으로 기본적으로 통행량이 많�
 Country Road 는 Main Highway 에 비하여 교통량이 적다. <br/>
 따라서 Main Highway 의 파란불의 주기는 Country Road 의 파란불의 주기보다 더욱 짧게 설정하였다. <br/>
 
-### 각 System 역할
+### 2-3. 각 System 역할
 #### System 1. CLOCK
 &nbsp;디지털 시계는 Controller, Memory에 시각 정보를 주어서 우리가 설계한 전체 시스템의 기준이 되는 시각정보를 제공하여 준다. <br/>
 따라서 Controller 와 Memory 는 디지털 시계에서 제공해준 시간을 기준으로 신호등에 현재 시간대의 누적 교통량에 해당하는 주기를 결정한다. <br/>
@@ -116,7 +116,7 @@ controller 로 부터는 누적 교통량을 받고 디지털 시계로 부터�
 이때 Rank_cal 의 입력으로 들어오는 15bit 의 왼쪽 5bit 는 시간 정보이고 오른쪽 10bit 는 누적교통량 정보이다. <br/>
 그러면 Rank_cal 은 위와 같이 구성된 15bit 를 받으면 해당 시각에 누적 교통량이 몇 위인지 시간에 따라 순위를 내림차순 정렬을 해준다. <br/>
 
-## 각 System 설명
+## 3. 각 System 설명
 ### System 1. CLOCK
 
 <p center="align" style="margin: 20px 0;">
@@ -571,8 +571,8 @@ endmodule
 따라서 입력이 존재한다면 현재 시각과 그에 해당하는 교통량의 순위가 10bit 로 구성되 출력으로 나온다. <br/>
 입력이 없는 경우 rank 에 내부 logic 으로 0 이 저장되어 있기 때문에 입력으로 들어오지 않은 시각의 순위는 0 으로 출력이 나타난다. <br/>
 
-## Module Verification
-### 1. Interface
+## 4. Module Verification
+### 4-1. Interface
 
 ``` systemverilog
 interface SYSTEM_BUS (
@@ -631,7 +631,7 @@ endinterface // SYSTEM_BUS
 
 &nbsp;System Verilog 의 modport 는 Interface 의 특정 신호에 대한 접근 권한을 정의하는데 사용되며 이를 통해 인터페이스를 사용하는 모듈의 역할에 따라 신호의 입출력 방향을 명확히 설정할 수 있다. <br/>
 
-### 2. Randomize Testbench Input
+### 4-2. Randomize Testbench Input
 
 ``` systemverilog
 ...
@@ -660,7 +660,7 @@ endinterface // SYSTEM_BUS
 그리고 main 교통량을 구현할때 이전 교통량을 저장해두고 해당인덱스를 더하고 5 로 나누어서 0~4 까지로 교통량을 수치화하였다. <br/>
 이전 교통량에 인덱스를 더하고 나누어 주면서 testbench 를 실행했을때 무작위 처럼 보이는 교통량 입력을 주었다. <br/>
 
-### 3. Assertion(Immediate, Not Concurrent)
+### 4-3. Assertion(Immediate, Not Concurrent)
 
 &nbsp;sequential logic 을 사용한 시스템으로서, concurrent assertions 을 사용해야 하지만, license 문제로 인해 immediate assertions 을 사용해야만 했다. <br/>
 이는, combinational logic 을 위한 검증으로 본 시스템에는 다소 맞지 않다. <br/>
@@ -675,7 +675,7 @@ endinterface // SYSTEM_BUS
 &nbsp;MEMORY : CHECK_ACCUM_EQUAL <br/>
 &nbsp;RANK_CALCULATOR : CHECK_RANK <br/>
 
-#### 1. Memory Overflow
+#### 4-3-1. Memory Overflow
 
 <p center="align" style="margin: 20px 0;">
 	<img width="49%" alt="Memory Overflow Code Image1" src="https://github.com/user-attachments/assets/c5d2db38-c54b-44b2-b9ff-70c2714ee983" />
