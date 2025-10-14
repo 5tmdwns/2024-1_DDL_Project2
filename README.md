@@ -440,7 +440,7 @@ module CONTROLLER (SYSTEM_BUS.CONTROLLER i1);
 ### System 4. MEMORY
 
 <p center="align" style="margin: 20px 0;">
-  <img width="90%" alt="MEMORY Schematic" src="https://github.com/user-attachments/assets/0345ca4f-2463-46a6-80ba-f28a7566c457" />
+	<img width="90%" alt="MEMORY Schematic" src="https://github.com/user-attachments/assets/0345ca4f-2463-46a6-80ba-f28a7566c457" />
 </p>
 
 &nbsp;<strong>전용면적: 212382.00 (sq um)</strong>
@@ -505,4 +505,66 @@ op2 가 WRITE 인 경우, 모든 시간대에 대해 교통량 순위 데이터�
 &nbsp;memory1 은 위와 같은 로직에 의해서 입력된 데이터를 메모리에 저장하고, 저장된 데이터를 출력 포트로 제공한다. <br/>
 따라서 외부에 의해 연산 명령이 주어지면 메모리의 읽기 및 쓰기 작업을 수행할 수 있다. <br/>
 
+### System 5. RANK_CALCULATOR
+
+<p center="align" style="margin: 20px 0;">
+	<img width="90%" alt="RANK_CALCULATOR Schematic" src="https://github.com/user-attachments/assets/92a25f97-47a5-495f-89c4-9f8aee886155" />
+</p>
+
+&nbsp;<strong>전용면적: 416855.56 (sq um)</strong>
+
+&nbsp;rank_cal 모듈은 Memory 로부터 받은 시각, 교통량의 정보를 교통량의 순서대로 정렬해 출력으로 현재 시각과 해당하는 순위른 다시 Memory에 보낸다. <br/>
+순위는 1 부터 24 로 나타나며 입력이 들어오지 않은 시각대에서 순위를 0 으로 보낸다. <br/>
+
+``` systemverilog
+...
+	always_comb begin
+			for (i = 0; i < 24; i ++) begin
+				RANK[i] = 0;
+			end
+			for (i = 0; i < 24; i ++) begin
+				for (j = 0; j < 24; j ++) begin
+					if (INPUT_DATA[i][9:0] < INPUT_DATA[j][9:0]) begin
+						RANK[i] = RANK[i] + 1;
+					end
+				end
+			end
+...
+```
+
+&nbsp;들어온 24 개 시각에 대해 우선 출력으로 나가는 순위 정보를 모두 0 으로 초기화 한다. <br/>
+다음으로 반복문을 사용하여 하나의 input 의 교통량을 다른 모든 23 개의 input 의 교통량과 비교한다. <br/>
+만약 교통량이 적다면 순위는 하나씩 더해져 뒤로 밀려난다. <br/>
+만약 같은 순위가 2 개 나오다면 다음 중복되는 수만큼 순위가 뒤로 밀려난다.(ex. 1 2 3 3 3 6 위 …) <br/>
+
+``` systemverilog
+...
+		for (i = 0; i < 24; i ++) begin
+			if (INPUT_DATA[i][9:0] >= 10'b00000_00000) begin
+				RANK[i] = RANK[i] + 1;
+			end
+		end
+...
+```
+
+&nbsp;위 코드에서 순위의 초기값을 0 으로 설정했기에 순위를 모두 1 더해줘 1 부터 시작하게 만든다. <br/>
+대신 input 이 들어온 경우만 한해서 순위가 개선되고 입력이 들어오지 않은 시간대에는 순위가 여전히 0 이 나타나게 된다. <br/>
+
+``` systemverilog
+		for (i = 0; i < 24; i ++) begin
+			if (INPUT_DATA[i][9:0] >= 10'b00000_00000) begin
+				RANKED_DATA[i] = {INPUT_DATA[i][14:10], RANK[i]};
+			end
+			else begin
+				RANKED_DATA[i] = {i, 5'b00000};
+			end
+		end
+	end
+endmodule
+```
+
+&nbsp;Memory 에게 다시 데이터를 보내주기 위해서 10bit 정보를 구성한다. <br/>
+상위 5bit 에는 입력에 해당하는 현재 시각 정보가, 하위 5bit 에는 내부 logic 으로 저장된 rank 값이 할당 된다. <br/>
+따라서 입력이 존재한다면 현재 시각과 그에 해당하는 교통량의 순위가 10bit 로 구성되 출력으로 나온다. <br/>
+입력이 없는 경우 rank 에 내부 logic 으로 0 이 저장되어 있기 때문에 입력으로 들어오지 않은 시각의 순위는 0 으로 출력이 나타난다. <br/>
 
