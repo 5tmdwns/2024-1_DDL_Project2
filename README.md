@@ -49,12 +49,12 @@ Country Road 는 Main Highway 에 비하여 교통량이 적다. <br/>
 따라서 Controller 와 Memory 는 디지털 시계에서 제공해준 시간을 기준으로 신호등에 현재 시간대의 누적 교통량에 해당하는 주기를 결정한다. <br/>
 
 #### System 2. 신호등
-&nbsp;우리가 설계한 전체 시스템은 Main Highway 의 통행량과 Country Road 에 정차되어 있는 자동차 대수를 기반으로 신호등의 주기가 결정된다. <br/>
-이때 Main Highway 의 교통량과 Country Road 에 정차되어 있는 자동차의 대수는 신호등에 부착되어 있는 센서가 측정하여서 Controller 에게 전달 시켜주도록 신호등을 모델링 하였다. <br/>
-즉, 신호등에는 Main Highway 의 교통량을 측정해주는 센서와 10 초 동안 Country Road 에 새로 정차하는 자동차 대수를 측정해주는 센서 2 개가 존재한다. <br/>
+&nbsp;우리가 설계한 전체 시스템은 Main Highway의 통행량과 Country Road에 정차되어 있는 자동차 대수를 기반으로 신호등의 주기가 결정된다. <br/>
+이때 Main Highway의 교통량과 Country Road에 정차되어 있는 자동차의 대수는 신호등에 부착되어 있는 센서가 측정하여서 Controller에게 전달 시켜주도록 신호등을 모델링 하였다. <br/>
+즉, 신호등에는 Main Highway의 교통량을 측정해주는 센서와 10초 동안 Country Road 에 새로 정차하는 자동차 대수를 측정해주는 센서 2개가 존재한다. <br/>
 
-&nbsp;기본적으로 testbench 를 처음 시작할 때 memory1 에 저장되어 있는 누적 교통량은 전부 0 으로 초기화 되어있는 상태이다. <br/>
-따라서 기본적으로 setting 되어 있는 main highway 의 green light 의 주기는 3 분이고 country road 의 green light 의 주기는 1 분이다. <br/>
+&nbsp;기본적으로 Testbench를 처음 시작할 때 Memory1 에 저장되어 있는 누적 교통량은 전부 0으로 초기화 되어있는 상태이다. <br/>
+따라서 기본적으로 Setting 되어 있는 Main Highway 의 Green Light 의 주기는 3분이고 country road 의 green light 의 주기는 1 분이다. <br/>
 
 &nbsp;이 상태에서 신호등은 신호등에 부착되어 있는 main highway 의 교통량을 측정하는 센서를 통하여 main highway 의 교통량을 측정한다. <br/>
 Main highway 의 교통량을 측정하는 센서가 1 시간 동안 Main highway 의 현재 교통량을 측정하여서 1 시간 동안 측정된 교통량이 얼마나 많은 지 그 정도를 0 에서 4 까지 나누어 총 5 단계로 구분하여서 controller 에 전달하여 준다. <br/>
@@ -95,12 +95,37 @@ controller 의 기능은 총 2 개로 다음과 같다. <br/>
 #### System 4. Memory1
 
 <p style="margin: 20px 0;">
-<img width="50%" alt="Memory1 Image" src="https://github.com/user-attachments/assets/80a66ed8-d673-4285-917d-f90060125a47" />
+  <img width="50%" alt="Memory1 Image" src="https://github.com/user-attachments/assets/80a66ed8-d673-4285-917d-f90060125a47" />
 </p>
 
 &nbsp;memory1 은 controller, 디지털 시계, rank_cal 3 개에서 모두 입력을 받는다. <br/>
 controller 로 부터는 누적 교통량을 받고 디지털 시계로 부터는 현재 시간을 받고 rank_cal 에서는 시간대별 누적 교통량의 순위를 받는다. <br/>
 
+&nbsp;그리고 memory1 은 각각의 모듈로 부터 받은 정보를 24 개의 시간의 구간별로 누적 교통량과 순위정보를 갱신한다. <br/>
 
+#### System 5. Rank_cal
 
+<p style="margin: 20px 0;">
+  <img width="50%" alt="Rank_cal Image" src="https://github.com/user-attachments/assets/daf162c2-07cd-4378-9257-3a4f8c8fe4d9" />
+</p>
 
+&nbsp;Rank_cal 시스템은 Memory1 으로 부터 입력 15bit 를 받는다. <br/>
+이때 Rank_cal 의 입력으로 들어오는 15bit 의 왼쪽 5bit 는 시간 정보이고 오른쪽 10bit 는 누적교통량 정보이다. <br/>
+그러면 Rank_cal 은 위와 같이 구성된 15bit 를 받으면 해당 시각에 누적 교통량이 몇 위인지 시간에 따라 순위를 내림차순 정렬을 해준다. <br/>
+
+## 각 System 설명
+### System 1. Digital Clock
+
+<p center="align" style="margin: 20px 0;">
+  <img width="90%" alt="Digital Clock Schematic" src="https://github.com/user-attachments/assets/7e2a6bd6-77ea-4219-9bc2-fe27b33bcc69" />
+</p>
+
+&nbsp;Clock 모듈은 시간 값을 출력한다. Clk 을 받아서 시간을 생성하고 각 모듈에 시간 값을 뿌려준다.
+다른 모듈들은 그 시간 값을 참고하여 값을 저장하거나 traffic 을 통제한다.
+
+``` verilog
+  always_ff @(posedge CLK or negedge RSTN) begin
+    if (!RSTN) begin
+    
+  end
+```
