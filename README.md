@@ -44,11 +44,11 @@ Country Road 는 Main Highway 에 비하여 교통량이 적다. <br/>
 따라서 Main Highway 의 파란불의 주기는 Country Road 의 파란불의 주기보다 더욱 짧게 설정하였다. <br/>
 
 ### 각 System 역할
-#### System 1. 디지털 시계
+#### System 1. CLOCK
 &nbsp;디지털 시계는 Controller, Memory에 시각 정보를 주어서 우리가 설계한 전체 시스템의 기준이 되는 시각정보를 제공하여 준다. <br/>
 따라서 Controller 와 Memory 는 디지털 시계에서 제공해준 시간을 기준으로 신호등에 현재 시간대의 누적 교통량에 해당하는 주기를 결정한다. <br/>
 
-#### System 2. 신호등
+#### System 2. TRAFFICLIGHT
 &nbsp;우리가 설계한 전체 시스템은 Main Highway의 통행량과 Country Road에 정차되어 있는 자동차 대수를 기반으로 신호등의 주기가 결정된다. <br/>
 이때 Main Highway의 교통량과 Country Road에 정차되어 있는 자동차의 대수는 신호등에 부착되어 있는 센서가 측정하여서 Controller에게 전달 시켜주도록 신호등을 모델링 하였다. <br/>
 즉, 신호등에는 Main Highway의 교통량을 측정해주는 센서와 10초 동안 Country Road 에 새로 정차하는 자동차 대수를 측정해주는 센서 2개가 존재한다. <br/>
@@ -71,7 +71,7 @@ Main highway 의 파란 불 주기가 기본적으로 country road 의 파란 �
 &nbsp;신호등에 부착되어 있는 센서가 main highway 가 파란 불일 때 country road 에 정차되어 있는 자동차 대수를 측정해서 controller 에 전달해 주면 controller 는 내부적으로 계산을 하여서 country road 에 정차되어 있는 차량수가 일정 이상이 될 때 신호등에게 pulse 를 준다. <br/>
 신호등은 이 pulse를 받으면 몇 clock 뒤에 main highway 를 빨간 불로 만들고 country road를 파란불로 만들어서 country road 에 정차되어 있는 자동차들을 통행하게 만들어 주어서 도로가 막히는 것을 방지할 수 있다. <br/>
 
-#### System 3. Controller
+#### System 3. CONTROLLER
 &nbsp;Controller 가 받는 입력은 총 3 개이다. <br/>
 첫 번째 입력은 신호등에게서 받는 현재 교통량 정보이고 두 번째 입력은 신호등에게서 받는 10 초동안 새로 country road 에 정차하는 자동차 대수이다. <br/>
 마지막으로 세 번째 입력은 memory 에게서 받는 정보이다. <br/>
@@ -92,7 +92,7 @@ controller 의 기능은 총 2 개로 다음과 같다. <br/>
 차량의 수를 더한다. <br/>
 이렇게 하는 이유는 main highway 가 빨간 불이 되면 country road 는 파란불이 되어 country road 에 정차 되어 있는 차들이 통행을 할 수 있기 때문이다. <br/>
 
-#### System 4. Memory1
+#### System 4. MEMORY
 
 <p style="margin: 20px 0;">
   <img width="30%" alt="Memory1 Image" src="https://github.com/user-attachments/assets/80a66ed8-d673-4285-917d-f90060125a47" />
@@ -103,7 +103,7 @@ controller 로 부터는 누적 교통량을 받고 디지털 시계로 부터�
 
 &nbsp;그리고 memory1 은 각각의 모듈로 부터 받은 정보를 24 개의 시간의 구간별로 누적 교통량과 순위정보를 갱신한다. <br/>
 
-#### System 5. Rank_cal
+#### System 5. RANK_CALCULATOR
 
 <p style="margin: 20px 0;">
   <img width="30%" alt="Rank_cal Image" src="https://github.com/user-attachments/assets/daf162c2-07cd-4378-9257-3a4f8c8fe4d9" />
@@ -114,13 +114,395 @@ controller 로 부터는 누적 교통량을 받고 디지털 시계로 부터�
 그러면 Rank_cal 은 위와 같이 구성된 15bit 를 받으면 해당 시각에 누적 교통량이 몇 위인지 시간에 따라 순위를 내림차순 정렬을 해준다. <br/>
 
 ## 각 System 설명
-### System 1. Digital Clock
+### System 1. CLOCK
 
 <p center="align" style="margin: 20px 0;">
-  <img width="90%" alt="Digital Clock Schematic" src="https://github.com/user-attachments/assets/7e2a6bd6-77ea-4219-9bc2-fe27b33bcc69" />
+  <img width="90%" alt="CLOCK Schematic" src="https://github.com/user-attachments/assets/7e2a6bd6-77ea-4219-9bc2-fe27b33bcc69" />
 </p>
 
-&nbsp;Clock 모듈은 시간 값을 출력한다. Clk 을 받아서 시간을 생성하고 각 모듈에 시간 값을 뿌려준다.
-다른 모듈들은 그 시간 값을 참고하여 값을 저장하거나 traffic 을 통제한다.
+&nbsp;<strong>전용면적: 5859.13 (sq um)</strong> <br/>
 
-&nbsp;<strong>전용면적: 5859.13 um</strong>
+&nbsp;Clock 모듈은 시간 값을 출력한다. Clk 을 받아서 시간을 생성하고 각 모듈에 시간 값을 뿌려준다. <br/>
+다른 모듈들은 그 시간 값을 참고하여 값을 저장하거나 traffic 을 통제한다. <br/>
+
+``` systemverilog
+   always_ff @(posedge i0.CLK) begin
+      if (i0.SECOND == 29) begin
+	 S_CLK <= ~S_CLK;
+	 i0.SECOND <= i0.SECOND + 1;
+      end
+      else if (i0.SECOND == 59) begin
+	 i0.SECOND <= 0;
+	 S_CLK <= ~S_CLK;
+      end
+      else begin
+	 i0.SECOND <= i0.SECOND + 1;
+      end
+   end // always_ff @ (posedge i0.CLK or negedge rstn)
+```
+
+이 블록은 CLK 을 통해서 SECOND를 생성하는 부분이다. <br/>
+S_CLK 신호는 다음 신호인 MINUTE 신호를 동기화 시키는데 사용된다. 
+S_CLK 신호가 1 부터 시작하면서 30 초후 0 으로 바뀌고 다시 30 초후 1 로 바뀐다. <br/>
+이때, 0 에서 1 로 바뀌는 신호는 MINUTE Block 의 동기화 신호로 아래와 같이 들어간다. <br/>
+
+
+``` systemverilog
+  always_ff @(posedge S_CLK) begin
+      if (i0.MINUTE == 29) begin
+	 M_CLK <= ~M_CLK;
+	 i0.MINUTE <= i0.MINUTE + 1;
+      end
+      else if (i0.MINUTE == 59) begin
+	 i0.MINUTE <= 0;
+	 M_CLK <= ~M_CLK;
+      end
+      else begin
+	 i0.MINUTE <= i0.MINUTE + 1;
+      end
+   end // always_ff @ (posedge S_CLK or negedge i0.rstn)
+```
+
+&nbsp;이 블록도 SECOND 블록과 마찬가지이다. <br/>
+M_CLK이 시간을 생성하는 블록의 동기화 신호가 된다. <br/>
+
+``` systemverilog
+   always_ff @(posedge M_CLK) begin
+      if (i0.HOUR == 23) begin
+	 i0.HOUR <= 0;
+      end
+      else begin
+	 i0.HOUR <= i0.HOUR + 1;
+      end
+   end // always_ff @ (posedge M_CLK or negedge i0.rstn)
+```
+
+&nbsp;CLK(Input) : 클럭 입력신호로 이 모듈의 동기신호 이다. <br/>
+SECOND, MINUTE, HOUR(Output) : 시간, 분, 초의 각각의 Output 이다. <br/>
+
+### System 2. TRAFFICLIGHT
+
+<p center="align" style="margin: 20px 0;">
+  <img width="90%" alt="TRAFFICLIGHT Schematic" src="https://github.com/user-attachments/assets/1a84d8fc-e231-4a68-be32-908b0f1dff72" />
+</p>
+
+&nbsp;<strong>전용면적: 7797 (sq um)</strong>
+
+``` systemverilog
+module TRAFFICLIGHT(SYSTEM_BUS.TRAFFIC_LIGHT i2);
+
+   enum logic [1:0] {S0 = 2'b00, S1, S2, S3} STATE;
+	typedef enum logic [1:0] {RED = 2'b00, GREEN, YELLOW} LIGHTSTATE;
+   logic PREV_PULSE, FINAL_PULSE, MAIN_CNT_ENABLE, CNTRY_CNT_ENABLE = 1'b0;
+   logic [8:0] CNT = 0;
+
+   LIGHTSTATE MAINLIGHT = GREEN;
+   LIGHTSTATE CNTRYLIGHT = RED;
+...
+```
+
+&nbsp;내부에서 사용하는 logic 은 다음과 같다. <br/>
+typedef enum logic [1:0] {RED = 2’b00, GREEN, YELLO} lightState : FSM 을 쉽게 사용하기 위한 열거형 type 선언. <br/>
+enum logic [2:0] {S0 = 2’b00, S1, S2, S3} state : state 는 FSM 을 이용하여 main highway 와 country highway 의 신호등을 결정. <br/>
+prevPulse : controller 에서 받아오는 펄스를 저장. <br/>
+finalPulse : prevPulse 를 이용하여 1 을 띄우게 함. <br/>
+mainCntEnable : main highway 의 초록불의 주기를 clock 에 따라 count 하기 위해 필요한 신호. <br/>
+cntryCntEnable : country highway 의 초록불의 주기를 clock 에 따라 count 하기 위해 필요한 신호. <br/>
+
+``` systemverilog
+   always_ff @(posedge i2.CLK) begin
+      i2.CURRENT_TRAFFIC_AMOUNT <= i2.MAIN_TRAFFIC;
+      i2.COUNTRY_CAR_NUM <= i2.COUNTRY_TRAFFIC;
+      i2.MAIN_LIGHT <= MAINLIGHT;
+      i2.MAINLIGHT <= MAINLIGHT;
+      i2.COUNTRYLIGHT <= CNTRYLIGHT;
+      
+      if (MAIN_CNT_ENABLE == 1'b1) begin
+	 if (i2.LIGHT_RANK[4:0] inside {5'b00001, 5'b01000}) begin
+	    if (CNT >= (750 - (5'd40 * i2.LIGHT_RANK[4:0]))) begin
+	       STATE <= S1;
+	       MAIN_CNT_ENABLE <= 1'b0;
+	       CNT <= 0;
+	    end
+	    else
+	      CNT <= CNT + 1;
+	 end
+	 else begin
+	    if (CNT >= 360) begin
+	       STATE <= S1;
+	       MAIN_CNT_ENABLE <= 1'b0;
+	       CNT <= 0;
+	    end
+	    else
+	      CNT <= CNT + 1;
+	 end // else: !if(i2.LIGHT_RANK inside {5'b00001, 5'b01010})
+      end // if (MAIN_CNT_ENABLE == 1'b1)
+      else if (CNTRY_CNT_ENABLE == 1'b1) begin
+	 if (FINAL_PULSE == 1'b1) begin
+	    if (CNT >= 240) begin
+	       STATE <= S3;
+	       CNTRY_CNT_ENABLE <= 1'b0;
+	       FINAL_PULSE <= 1'b0;
+	       CNT <= 0;
+	    end
+	    else
+	      CNT <= CNT + 1;
+	 end
+	 else begin
+	    if (CNT >= 120) begin
+	       STATE <= S3;
+	       CNTRY_CNT_ENABLE <= 1'b0;
+	       CNT <= 0;
+	    end
+	    else
+	      CNT <= CNT + 1;
+	 end // else: !if(FINAL_PULSE == 1'b1)
+      end // if (CNTRY_CNT_ENABLE == 1'b1)
+      else
+	CNT <= 0;
+   end // always_ff @ (posedge i2.CLK)
+
+   always_ff @(posedge i2.CLK) begin
+      PREV_PULSE <= i2.COUNTRY_PULSE;
+      if ((i2.COUNTRY_PULSE == 1'b0) && (PREV_PULSE == 1'b1))
+	FINAL_PULSE <= 1'b1;
+      else begin
+	 case (STATE)
+	   S0 : begin
+	      if (FINAL_PULSE == 1'b1)
+		STATE <= S1;
+	      else
+		MAIN_CNT_ENABLE <= 1'b1;
+	   end
+	   S1 : begin
+	      MAIN_CNT_ENABLE <= 1'b0;
+	      STATE <= S2;
+	   end
+	   S2 : CNTRY_CNT_ENABLE <= 1'b1;
+	   S3 : begin
+	      CNTRY_CNT_ENABLE <= 1'b0;
+	      STATE <= S0;
+	   end
+	   default : STATE <= S0;
+	 endcase // case (STATE)
+      end // else: !if((i2.COUNTRY_PULSE == 1'b0) && (PREV_PULSE == 1'b1))
+   end // always_ff @ (posedge i2.CLK)
+
+   always @(*) begin
+      case (STATE)
+	S0 : MAINLIGHT = GREEN;
+	S1 : MAINLIGHT = YELLOW;
+	S2 : MAINLIGHT = RED;
+	S3 : MAINLIGHT = RED;
+	default : MAINLIGHT = GREEN;
+      endcase // case (STATE)
+   end
+
+   always @(*) begin
+      case (STATE)
+	S0 : CNTRYLIGHT = RED;
+	S1 : CNTRYLIGHT = RED;
+	S2 : CNTRYLIGHT = GREEN;
+	S3 : CNTRYLIGHT = YELLOW;
+	default : CNTRYLIGHT = RED;
+      endcase // case (STATE)
+   end
+...
+```
+
+&nbsp;구동원리 : FSM 을 이용하여, state 별로 동작하게 한다. <br/>
+
+&nbsp;S0 (main : GREEN, country : RED) <br/>
+mainCntEnable 동작 -> main highway 의 초록불 -> cnt 의 counter 기능 활성화 -> inside 를 이용하여 우선순위를 받을시, 받아온 우선 순위를 이용하여 cnt 가 730 - (40 * 우선순위)가 넘어갈시 S1 으로 이동. <br/>
+그렇지 않다면, 신호등 기본 주기인 360 clock 뒤에 S1 으로 이동하도록 설계. <br/>
+
+&nbsp;S1 (main : YELLOW, country : RED) <br/>
+main highway 의 노란불 -> 다음 클락에 S2 로 이동하도록 설계. <br/>
+
+&nbsp;S2 (main : RED, country : GREEN) <br/>
+cntryCntEnable 동작 -> country highway 의 초록불 -> cnt 의 counter 기능 활성화 -> 단, finalPulse 가 있을 시, country highway 의 차량이 30 대
+이상이므로 country highway 의 GREEN 주기를 240 clock 으로 늘려줌. <br/>
+그렇지 않다면, 신호등 기본 주기인 120 clock 뒤에 S3 로 이동하도록 설계. <br/>
+
+&nbsp;S3 (main : RED, country : YELLOW) <br/>
+country highway 의 노란불 -> 다음 클락에 S0 로 이동하도록 설계. <br/>
+
+&nbsp;이처럼, FSM 을 이용하여 간단한 신호등 모듈을 만들고, 외부적 요소들은 조건문을 추가하여 설계하였다. <br/>
+
+&nbsp;* controller 의 (0 -> 1 -> 0) pulse 를 1 의 신호로 변경하기 : prevPulse 에 controller 에서 주는 pulse(1)를 저장한 뒤, 현 clock 에서의 prevPulse == 0, 다음 clock 에서 prevPulse == 1 이 되는 것을 이용하여, finalPulse 를 1 로 변경. <br/>
+
+### System 3. CONTROLLER
+
+<p center="align" style="margin: 20px 0;">
+  <img width="90%" alt="CONTROLLER Schematic" src="https://github.com/user-attachments/assets/53c4ec59-86e8-4042-956c-8d0788d1f56c" />
+</p>
+
+&nbsp;<strong>전용면적: 8653.63 (sq um)</strong>
+
+&nbsp;controller 모듈은 교차 도로와 메인 도로의 신호 상태와 교통량을 관리하며, 특정 조건에서 신호 제어 펄스를 생성한다. <br/>
+교차 도로의 누적 차량 수를 계산하고, 교통량 변화에 따라 메모리 작업 상태를 설정한다. <br/>
+또한, 누적 교통량 데이터를 기반으로 신호등 순위를 결정한다. <br/>
+
+``` systemverilog
+module CONTROLLER (SYSTEM_BUS.CONTROLLER i1);
+
+   logic [6:0] COUNTRY_CAR_NUMBER = 0;
+   bit [2:0] PREV_COUNTRY_CAR_NUM, PREV_CURRENT_TRAFFIC_AMOUNT;
+   MEM_OP OP;
+...
+```
+
+&nbsp;country_car_number: 이 신호는 교차 도로의 누적 차량 수를 저장하는 역할을 한다. <br/>
+교차 도로의 차량 수가 업데이트될 때마다 증가하며, 일정 수치(예: 30)를 초과할 경우 신호 제어 펄스를 활성화한다. <br/>
+7 비트로 구성되어 있으며, 초기값은 0 으로 설정된다. <br/>
+
+&nbsp;prev_country_car_num: 이 신호는 이전 클럭 사이클에서의 교차 도로 차량 수를 저장한다. <br/>
+현재 교차 도로 차량 수와 비교하여 변화가 있는지 확인하는 데 사용된다. <br/>
+3 비트로 구성되어 있다. <br/>
+
+&nbsp;prev_current_traffic_amount: 이 신호는 이전 클럭 사이클에서의 메인 도로의 현재 교통량을 저장한다. <br/>
+현재 교통량과 비교하여 변화가 있는지 확인하는 데 사용된다. <br/>
+3 비트로 구성되어 있다. <br/>
+
+&nbsp;첫 번째 always_ff 블록에 대해서 설명하겠다. <br/>
+
+``` systemverilog
+...
+   always_ff @(posedge i1.CLK) begin
+      PREV_COUNTRY_CAR_NUM <= i1.COUNTRY_CAR_NUM;
+      PREV_CURRENT_TRAFFIC_AMOUNT <= i1.CURRENT_TRAFFIC_AMOUNT;
+   end
+...
+```
+
+&nbsp;이 블록은 교차 도로의 차량 수와 메인 도로의 교통량을 업데이트하는 역할을 한다. <br/>
+이전 값을 현재 값으로 저장하여 다음 클럭 사이클에서 비교할 수 있도록 한다. <br/>
+
+``` systemverilog
+   always_ff @(posedge i1.CLK) begin
+      if (i1.COUNTRY_CAR_NUM != PREV_COUNTRY_CAR_NUM) begin
+	 if (i1.MAIN_LIGHT[0] == 1) begin
+	    COUNTRY_CAR_NUMBER <= COUNTRY_CAR_NUMBER + i1.COUNTRY_CAR_NUM;
+	    if (COUNTRY_CAR_NUMBER > 30) begin
+	       i1.COUNTRY_PULSE <= 1;
+	       COUNTRY_CAR_NUMBER <= 0;
+	    end
+	    else begin
+	       i1.COUNTRY_PULSE <= 0;
+	    end
+	 end
+	 else if (i1.MAIN_LIGHT[0] == 0) begin
+	    COUNTRY_CAR_NUMBER <= 0;
+	    i1.COUNTRY_PULSE <= 0;
+	 end
+      end // if (i1.COUNTRY_CAR_NUM != PREV_COUNTRY_CAR_NUM)
+      else begin
+	 i1.COUNTRY_PULSE <= 0;
+      end // else: !if(i1.COUNTRY_CAR_NUM != PREV_COUNTRY_CAR_NUM)
+   end // always_ff @ (posedge i1.CLK)
+```
+
+&nbsp;이 블록은 교차 도로의 차량 수를 관리하고, 메인도로의 신호 상태에 따라 교차 도로 신호 제어 펄스를 생성한다. <br/>
+
+&nbsp;country_car_num 가 prev_country_car_num 과 다를 경우, 즉 교차 도로의 차량 수가 변화한 경우에 실행된다. <br/>
+예를들어 메인도로 신호가 녹색(light[0] == 1)일 때 누적 차량 수(country_car_number)에 현재 차량 수(country_car_num)를 더한다. <br/>
+누적 차량 수가 30 을 초과하면, 신호 제어 펄스(country_pulse)를 활성화(1)하고, 누적 차량 수를 초기화한다. <br/>
+
+&nbsp;그렇지 않으면, 신호 제어 펄스를 비활성화(0)한다. <br/>
+메인도로 신호가 녹색이 아닌 경우(light[0] == 0) 누적 차량 수와 신호 제어 펄스를 초기화한다. <br/>
+교차 도로의 차량 수가 이전 값과 동일한 경우 신호 제어 펄스를 비활성화한다. <br/>
+
+``` systemverilog
+...
+   always_ff @(posedge i1.CLK) begin
+      if (i1.CURRENT_TRAFFIC_AMOUNT != PREV_CURRENT_TRAFFIC_AMOUNT) begin
+	 i1.OP1 <= WRITE;
+	 i1.ACCUM_DATA1[14:10] <= i1.HOUR;
+	 i1.ACCUM_DATA1[9:0] <= i1.CURRENT_TRAFFIC_AMOUNT + i1.ACCUM_DATA2[14:5];
+      end
+      else if (i1.OP2 == WRITE)
+	 i1.LIGHT_RANK[4:0] <= i1.ACCUM_DATA2[4:0];
+      else
+	i1.OP1 <= READ;
+   end // always_ff @ (posedge i1.CLK)
+...
+```
+
+&nbsp;이 블록은 현재 교통량을 관리하고, 메모리 작업 상태를 설정하며, 누적 교통량 데이터를 계산한다. <br/>
+
+&nbsp;current_traffic_amount 가 prev_current_traffic_amount 와 다를 경우, 즉 현재 교통량이 변화한 경우에 실행된다. <br/>
+현재 교통량이 이전 값과 다른 경우 메모리 작업 상태(op)를 쓰기(WRITE)로 설정한다. <br/>
+현재 시간(hour)을 누적 데이터(accum_data1)의 상위 5 비트에 저장한다. <br/>
+현재 교통량(current_traffic_amount)과 이전에 누적된 교통량(accum_data2 의 상위 10 비트)을 더해 누적 데이터(accum_data1)의 하위 10 비트에 저장한다. <br/>
+
+&nbsp;현재 교통량이 이전 값과 같은 경우 메모리 작업 상태(op)를 읽기(READ)로 설정한다. <br/>
+
+### System 4. MEMORY
+
+<p center="align" style="margin: 20px 0;">
+  <img width="90%" alt="MEMORY Schematic" src="https://github.com/user-attachments/assets/0345ca4f-2463-46a6-80ba-f28a7566c457" />
+</p>
+
+&nbsp;<strong>전용면적: 212382.00 (sq um)</strong>
+
+&nbsp;memory1 모듈은 시간대별로 교통량과 순위 데이터를 저장하고 업데이트하는 역할을 한다. <br/>
+이 모듈은 컨트롤러로부터 받은 교통량 정보를 특정 시간대에 저장하며, Rank_Cal 로부터 받은 순위 데이터를 기반으로 교통량 순위를 업데이트한다. <br/>
+저장된 데이터는 다른 모듈로 전송되어 교통 상태를 관리하는 데 사용된다. <br/>
+또한, 현재 시간대의 교통량과 순위 데이터를 컨트롤러에 제공한다. <br/>
+
+``` systemverilog
+module MEMORY (SYSTEM_BUS.MEM i3);
+
+   bit [19:0] MEMORY[23:0];
+   bit [4:0]		i;
+...
+```
+
+&nbsp;* memory 배열 (bit [19:0] memory[23:0]): 이 배열은 24 개의 20 비트 데이터를 저장하는 메모리이다. 각 시간대별로 데이터를 저장할 수 있도록 설계되었다. 상위 5 비트는 시간 정보 중간 10 비트는 교통량 정보 마지막 하위 5 비트는 교통량 순위 정보를 담고 있다. <br/>
+
+&nbsp;* 반복문 인덱스 (bit [4:0] i): i 는 for 루프에서 사용되는 반복문 인덱스이다. 메모리와 데이터 배열을 순회하며 데이터를 읽거나 쓸 때 사용된다. bit[4:0]은 5 비트 크기의 인덱스를 의미한다. 5 비트는 0 부터 31 까지의 값을 표현할 수 있으므로, 24 개의 데이터 인덱스를 순회하는 데 충분하게 사용할 수 있다. <br/>
+
+``` systemverilog
+...
+   always_ff @(posedge i3.CLK) begin
+      if (i3.OP1 == WRITE) begin
+	 MEMORY[i3.HOUR][19:5] <= i3.ACCUM_DATA1[14:0];
+	 for (i = 0; i < 24; i ++) begin
+	    i3.TRAFFIC_DATA[i][14:0] <= MEMORY[i][19:5];
+	 end
+      end
+      else if (i3.OP2 == WRITE) begin
+	 for (i = 0; i < 24; i ++) begin
+	    MEMORY[i][4:0] <= i3.TRAFFIC_RANKED_DATA[i][4:0];
+	 end
+	 i3.ACCUM_DATA2[14:0] <= MEMORY[i3.HOUR][14:0];
+      end
+      else begin
+	 MEMORY[i3.HOUR][19:5] <= i3.ACCUM_DATA1[14:0];
+	 i3.ACCUM_DATA2[14:0] <= MEMORY[i3.HOUR][14:0];
+      end
+   end // always_ff @ (posedge i3.CLK)
+...
+```
+
+&nbsp;always_ff 블록은 클럭 신호 (clk)의 상승 에지에서 동작한다. <br/>
+이 블록은 주어진 연산 명령 (op1 및 op2)에 따라 메모리 읽기 및 쓰기 작업을 수행하며 누적 교통량 데이터와 교통량 순위 데이터를 관리한다. <br/>
+
+&nbsp;* WRITE 동작 (op1 이 WRITE 일 때) <br/>
+op1 이 WRITE 인 경우, 현재 시간 (hour)에 해당하는 메모리 위치에 누적 교통량 데이터 (accum_data1[14:0])를 저장한다. <br/>
+메모리의 상위 15 비트([19:5])에 저장된다. <br/>
+모든 시간대에 대해 누적 교통량 데이터를 traffic_data 배열에 갱신한다. <br/>
+메모리의 상위 15 비트 ([19:5])를 traffic_data 의 각 시간대 위치에 복사한다. <br/>
+
+&nbsp;* WRITE 동작 (op2 가 WRITE 일 때) <br/>
+op2 가 WRITE 인 경우, 모든 시간대에 대해 교통량 순위 데이터를 메모리에 갱신한다. <br/>
+각 시간대의 교통량 순위 데이터 (traffic_ranked_data[i][4:0])를 메모리의 하위 5 비트 ([4:0])에 저장한다. <br/>
+현재 시간 (hour)에 해당하는 메모리 위치에서 누적 교통량과 순위 데이터를 읽어와서 accum_data2 에 저장한다. <br/>
+
+&nbsp;* 기본 동작 (READ 동작) <br/>
+기본 동작으로, op1 이 READ 일 때와 유사하게 현재 시간 (hour)에 해당하는 메모리 위치에 누적 교통량 데이터를 저장하고 (accum_data1[14:0]), 그 위치에서 누적 교통량과 순위 데이터를 읽어와서 accum_data2 에 저장한다. <br/>
+
+&nbsp;memory1 은 위와 같은 로직에 의해서 입력된 데이터를 메모리에 저장하고, 저장된 데이터를 출력 포트로 제공한다. <br/>
+따라서 외부에 의해 연산 명령이 주어지면 메모리의 읽기 및 쓰기 작업을 수행할 수 있다. <br/>
+
+
