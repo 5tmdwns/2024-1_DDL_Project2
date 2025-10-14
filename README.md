@@ -65,8 +65,8 @@ Country Road는 Main Highway에 비하여 교통량이 적습니다. <br/>
 이때 Main Highway의 교통량과 Country Road에 정차되어 있는 자동차의 대수는 신호등에 부착되어 있는 센서가 측정하여서 CONTROLLER에게 전달 시켜주도록 신호등을 모델링 하였다. <br/>
 즉, 신호등에는 Main Highway의 교통량을 측정해주는 센서와 10초 동안 Country Road에 새로 정차하는 자동차 대수를 측정해주는 센서 2개가 존재합니다. <br/>
 
-&nbsp;기본적으로 Testbench를 처음 시작할 때 MEMORY에 저장되어 있는 누적 교통량은 전부 0으로 초기화 되어있는 상태이다. <br/>
-따라서, 기본적으로 Setting 되어 있는 Main Highway 의 Green Light의 주기는 3분이고 Country Road의 Green Light의 주기는 1분이다. <br/>
+&nbsp;기본적으로 Testbench를 처음 시작할 때 MEMORY에 저장되어 있는 누적 교통량은 전부 0으로 초기화 되어있는 상태입니다. <br/>
+따라서, 기본적으로 Setting 되어 있는 Main Highway의 Green Light의 주기는 3분이고 Country Road의 Green Light의 주기는 1분입니다. <br/>
 
 &nbsp;이 상태에서 신호등은 신호등에 부착되어 있는 Main Highway의 교통량을 측정하는 센서를 통하여 Main Highway의 교통량을 측정합니다. <br/>
 Main highway의 교통량을 측정하는 센서가 1시간 동안 Main highway의 현재 교통량을 측정하여서 1시간 동안 측정된 교통량이 얼마나 많은 지 그 정도를 0에서 4까지 나누어 총 5단계로 구분하여서 CONTROLLER에 전달하여 줍니다. <br/>
@@ -78,31 +78,30 @@ Main highway의 교통량을 측정하는 센서가 1시간 동안 Main highway�
 &nbsp;신호등에 부착되어 있는 또 다른 센서는 Main Highway가 파란 불일 때 Country Road는 빨간 불이므로 신호등에 부착되어있는 센서는 10초 동안 Country Road에 새로 정차하는 자동차 대수를 셉니다. <br/>
 Main highway의 파란 불 주기가 기본적으로 Country Road의 파란 불 주기보다 훨씬 길기 때문에 Country Road에 정차되어 있는 차량 대수가 많아질 때 도로가 막히는 현상을 해결해주기 위해서 이 기능을 추가했습니다. <br/>
 
-&nbsp;country road 에 정차되어 있는 차량 대수가 많아질 때 도로가 막히는 현상을 해결해주기 위해서 이 기능을 추가했다. <br/>
+&nbsp;Country Road에 정차되어 있는 차량 대수가 많아질 때 도로가 막히는 현상을 해결해주기 위해서 이 기능을 추가했습니다. <br/>
 
-&nbsp;신호등에 부착되어 있는 센서가 main highway 가 파란 불일 때 country road 에 정차되어 있는 자동차 대수를 측정해서 controller 에 전달해 주면 controller 는 내부적으로 계산을 하여서 country road 에 정차되어 있는 차량수가 일정 이상이 될 때 신호등에게 pulse 를 준다. <br/>
-신호등은 이 pulse를 받으면 몇 clock 뒤에 main highway 를 빨간 불로 만들고 country road를 파란불로 만들어서 country road 에 정차되어 있는 자동차들을 통행하게 만들어 주어서 도로가 막히는 것을 방지할 수 있다. <br/>
+&nbsp;신호등에 부착되어 있는 센서가 Main Highway가 파란 불일 때 Country Road에 정차되어 있는 자동차 대수를 측정해서 CONTROLLER에 전달해 주면 CONTROLLER는 내부적으로 계산을 하여서 Country Road에 정차되어 있는 차량수가 일정 이상이 될 때 신호등에게 Pulse를 줍니다. <br/>
+신호등은 이 Pulse를 받으면 몇 Clock 뒤에 Main Highway를 빨간 불로 만들고 Country Road를 파란불로 만들어서 Country Road에 정차되어 있는 자동차들을 통행하게 만들어 주어서 도로가 막히는 것을 방지할 수 있습니다. <br/>
 
 #### System 3. CONTROLLER
-&nbsp;Controller 가 받는 입력은 총 3 개이다. <br/>
-첫 번째 입력은 신호등에게서 받는 현재 교통량 정보이고 두 번째 입력은 신호등에게서 받는 10 초동안 새로 country road 에 정차하는 자동차 대수이다. <br/>
-마지막으로 세 번째 입력은 memory 에게서 받는 정보이다. <br/>
-세 번째 입력은 총 15 비트로 구성되어 있고 앞의 10 비트는 현재 디지털 시계에서 주는 시간에 해당하는 구간의 총 누적 교통량이다. <br/>
-이는 테스트 벤치가 시작 했을 때부터 현재까지 해당구간에서 측정된 교통량의 총합이다. <br/>
-그리고 뒤의 5bit 는 memory1 에 누적된 교통량을 기반으로 현재 시각이 하루 24 시간 중에서 교통량이 몇 위인지를 담고 있다. <br/>
-controller 의 기능은 총 2 개로 다음과 같다. <br/>
-첫번째 기능은 memory1 이 주는 누적교통량과 신호등에서 주는 현재 교통량을 더한 후에 이 값을 디지털 시계에서 주는 현재 시간 정보와 합쳐서 memory1 에게 다시 전달하여 준다. <br/>
-이 정보는 총 15bit 로 왼쪽 5bit 는 디지털 시계에서 주는 시간 정보를 저장하고 있고 오른쪽 10bit 는 현재 시각에 해당하는 계산된 누적교통량이다. <br/>
-이 기능을 그림으로 나타내면 다음과 같다. <br/>
+&nbsp;CONTROLLER가 받는 입력은 총 3개입니다. <br/>
+첫 번째 입력은 신호등에게서 받는 현재 교통량 정보이고 두 번째 입력은 신호등에게서 받는 10초동안 새로 Country Road에 정차하는 자동차 대수입니다. <br/>
+마지막으로 세 번째 입력은 MEMORY에게서 받는 정보입니다. <br/>
+세 번째 입력은 총 15비트로 구성되어 있고 앞의 10비트는 현재 디지털 시계에서 주는 시간에 해당하는 구간의 총 누적 교통량입니다. <br/>
+이는 테스트 벤치가 시작 했을 때부터 현재까지 해당구간에서 측정된 교통량의 총합입니다. <br/>
+그리고, 뒤의 5bit는 MEMORY에 누적된 교통량을 기반으로 현재 시각이 하루 24시간 중에서 교통량이 몇 위인지를 담고 있습니다. <br/>
+CONTROLLER의 기능은 총 2 개로 다음과 같습니다. <br/>
+첫번째 기능은 MEMORY가 주는 누적교통량과 신호등에서 주는 현재 교통량을 더한 후에, 이 값을 디지털 시계에서 주는 현재 시간 정보와 합쳐서 MEMORY에게 다시 전달하여 줍니다. <br/>
+이 정보는 총 15bit로 왼쪽 5bit는 디지털 시계에서 주는 시간 정보를 저장하고 있고, 오른쪽 10bit는 현재 시각에 해당하는 계산된 누적교통량입니다. <br/>
+이 기능을 그림으로 나타내면 다음과 같습니다. <br/>
 
 <p align="center" style="margin: 20px 0;">
   <img width="90%" alt="Controller Image" src="https://github.com/user-attachments/assets/4180848d-a0d1-49ef-99c2-8df5ac1c0399" />
 </p>
 
-&nbsp;두번째 기능은 10 초 동안 country road 에 새로 정차하는 자동차 대수를 신호등에서 주면 controller 는 이 값들을 모두 더하여 country road 에 정차되어 있는 차량이 30 대가 넘으면 신호등에게 pulse 를 준다. <br/>
-이 때 controller 는 main highway 가 파란불 일 때만 country road 에 정차되어 있는
-차량의 수를 더한다. <br/>
-이렇게 하는 이유는 main highway 가 빨간 불이 되면 country road 는 파란불이 되어 country road 에 정차 되어 있는 차들이 통행을 할 수 있기 때문이다. <br/>
+&nbsp;두번째 기능은 10초 동안 Country Road에 새로 정차하는 자동차 대수를 신호등에서 주면, CONTROLLER는 이 값들을 모두 더하여 Country Road에 정차되어 있는 차량이 30대가 넘으면 신호등에게 Pulse를 줍니다. <br/>
+이 때, CONTROLLER는 Main Highway가 파란불 일 때만 Country Road에 정차되어 있는 차량의 수를 더합니다. <br/>
+이렇게 하는 이유는, Main Highway가 빨간 불이 되면 Country Road는 파란불이 되어 Country Road에 정차 되어 있는 차들이 통행을 할 수 있기 때문입니다. <br/>
 
 #### System 4. MEMORY
 
@@ -110,10 +109,10 @@ controller 의 기능은 총 2 개로 다음과 같다. <br/>
   <img width="30%" alt="Memory1 Image" src="https://github.com/user-attachments/assets/80a66ed8-d673-4285-917d-f90060125a47" />
 </p>
 
-&nbsp;memory1 은 controller, 디지털 시계, rank_cal 3 개에서 모두 입력을 받는다. <br/>
-controller 로 부터는 누적 교통량을 받고 디지털 시계로 부터는 현재 시간을 받고 rank_cal 에서는 시간대별 누적 교통량의 순위를 받는다. <br/>
+&nbsp;MEMORY는 CONTROLLER, CLOCK, RANK_CALCULATOR 3개에서 모두 입력을 받습니다. <br/>
+CONTROLLER 부터는 누적 교통량을 받고, 디지털 시계로 부터는 현재 시간을 받고, RANK_CALCULATOR에서는 시간대별 누적 교통량의 순위를 받습니다. <br/>
 
-&nbsp;그리고 memory1 은 각각의 모듈로 부터 받은 정보를 24 개의 시간의 구간별로 누적 교통량과 순위정보를 갱신한다. <br/>
+&nbsp;그리고, MEMORY는 각각의 모듈로 부터 받은 정보를 24개의 시간의 구간별로 누적 교통량과 순위정보를 갱신합니다. <br/>
 
 #### System 5. RANK_CALCULATOR
 
@@ -121,9 +120,9 @@ controller 로 부터는 누적 교통량을 받고 디지털 시계로 부터�
   <img width="30%" alt="Rank_cal Image" src="https://github.com/user-attachments/assets/daf162c2-07cd-4378-9257-3a4f8c8fe4d9" />
 </p>
 
-&nbsp;Rank_cal 시스템은 Memory1 으로 부터 입력 15bit 를 받는다. <br/>
-이때 Rank_cal 의 입력으로 들어오는 15bit 의 왼쪽 5bit 는 시간 정보이고 오른쪽 10bit 는 누적교통량 정보이다. <br/>
-그러면 Rank_cal 은 위와 같이 구성된 15bit 를 받으면 해당 시각에 누적 교통량이 몇 위인지 시간에 따라 순위를 내림차순 정렬을 해준다. <br/>
+&nbsp;RANK_CALCULATOR 시스템은 MEMORY로 부터 입력 15bit를 받습니다. <br/>
+이때 RANK_CALCULATOR의 입력으로 들어오는 15bit의 왼쪽 5bit는 시간 정보이고, 오른쪽 10bit는 누적교통량 정보입니다. <br/>
+그러면 RANK_CALCULATOR는 위와 같이 구성된 15bit를 받으면, 해당 시각에 누적 교통량이 몇 위인지 시간에 따라 순위를 내림차순 정렬을 해줍니다. <br/>
 
 ## 3. 각 System 설명
 ### System 1. CLOCK
@@ -134,8 +133,9 @@ controller 로 부터는 누적 교통량을 받고 디지털 시계로 부터�
 
 &nbsp;<strong>전용면적: 5859.13 (sq um)</strong> <br/>
 
-&nbsp;Clock 모듈은 시간 값을 출력한다. Clk 을 받아서 시간을 생성하고 각 모듈에 시간 값을 뿌려준다. <br/>
-다른 모듈들은 그 시간 값을 참고하여 값을 저장하거나 traffic 을 통제한다. <br/>
+&nbsp;CLOCK 모듈은 시간 값을 출력합니다. <br/>
+CLK를 받아서 시간을 생성하고, 각 모듈에 시간 값을 뿌려줍니다. <br/>
+다른 모듈들은 그 시간 값을 참고하여 값을 저장하거나, Traffic을 통제합니다. <br/>
 
 ``` systemverilog
    always_ff @(posedge i0.CLK) begin
@@ -153,10 +153,10 @@ controller 로 부터는 누적 교통량을 받고 디지털 시계로 부터�
    end // always_ff @ (posedge i0.CLK or negedge rstn)
 ```
 
-이 블록은 CLK 을 통해서 SECOND를 생성하는 부분이다. <br/>
-S_CLK 신호는 다음 신호인 MINUTE 신호를 동기화 시키는데 사용된다. 
-S_CLK 신호가 1 부터 시작하면서 30 초후 0 으로 바뀌고 다시 30 초후 1 로 바뀐다. <br/>
-이때, 0 에서 1 로 바뀌는 신호는 MINUTE Block 의 동기화 신호로 아래와 같이 들어간다. <br/>
+&nbsp;이 블록은 CLK을 통해서 SECOND를 생성하는 부분입니다. <br/>
+S_CLK 신호는 다음 신호인 MINUTE 신호를 동기화 시키는데 사용됩니다. <br/>
+S_CLK 신호가 1부터 시작하면서 30초후 0으로 바뀌고 다시 30초후 1로 바뀝니다. <br/>
+이때, 0에서 1로 바뀌는 신호는 MINUTE Block의 동기화 신호로 아래와 같이 들어갑니다. <br/>
 
 
 ``` systemverilog
@@ -175,8 +175,8 @@ S_CLK 신호가 1 부터 시작하면서 30 초후 0 으로 바뀌고 다시 30 
    end // always_ff @ (posedge S_CLK or negedge i0.rstn)
 ```
 
-&nbsp;이 블록도 SECOND 블록과 마찬가지이다. <br/>
-M_CLK이 시간을 생성하는 블록의 동기화 신호가 된다. <br/>
+&nbsp;이 블록도 SECOND 블록과 마찬가지입니다. <br/>
+M_CLK이 시간을 생성하는 블록의 동기화 신호가 됩니다. <br/>
 
 ``` systemverilog
    always_ff @(posedge M_CLK) begin
@@ -189,8 +189,8 @@ M_CLK이 시간을 생성하는 블록의 동기화 신호가 된다. <br/>
    end // always_ff @ (posedge M_CLK or negedge i0.rstn)
 ```
 
-&nbsp;CLK(Input) : 클럭 입력신호로 이 모듈의 동기신호 이다. <br/>
-SECOND, MINUTE, HOUR(Output) : 시간, 분, 초의 각각의 Output 이다. <br/>
+&nbsp;CLK(Input) : 클럭 입력신호로 이 모듈의 동기신호입니다. <br/>
+SECOND, MINUTE, HOUR(Output) : 시간, 분, 초의 각각의 Output 입니다. <br/>
 
 ### System 2. TRAFFICLIGHT
 
@@ -213,13 +213,14 @@ module TRAFFICLIGHT(SYSTEM_BUS.TRAFFIC_LIGHT i2);
 ...
 ```
 
-&nbsp;내부에서 사용하는 logic 은 다음과 같다. <br/>
-typedef enum logic [1:0] {RED = 2’b00, GREEN, YELLO} lightState : FSM 을 쉽게 사용하기 위한 열거형 type 선언. <br/>
-enum logic [2:0] {S0 = 2’b00, S1, S2, S3} state : state 는 FSM 을 이용하여 main highway 와 country highway 의 신호등을 결정. <br/>
-prevPulse : controller 에서 받아오는 펄스를 저장. <br/>
-finalPulse : prevPulse 를 이용하여 1 을 띄우게 함. <br/>
-mainCntEnable : main highway 의 초록불의 주기를 clock 에 따라 count 하기 위해 필요한 신호. <br/>
-cntryCntEnable : country highway 의 초록불의 주기를 clock 에 따라 count 하기 위해 필요한 신호. <br/>
+&nbsp;내부에서 사용하는 Logic은 다음과 같습니다. <br/>
+
+- typedef enum logic [1:0] {RED = 2’b00, GREEN, YELLO} lightState : FSM 을 쉽게 사용하기 위한 열거형 type 선언. <br/>
+- enum logic [2:0] {S0 = 2’b00, S1, S2, S3} state : state 는 FSM 을 이용하여 main highway 와 country highway 의 신호등을 결정. <br/>
+- prevPulse : controller 에서 받아오는 펄스를 저장. <br/>
+- finalPulse : prevPulse 를 이용하여 1 을 띄우게 함. <br/>
+- mainCntEnable : main highway 의 초록불의 주기를 clock 에 따라 count 하기 위해 필요한 신호. <br/>
+- cntryCntEnable : country highway 의 초록불의 주기를 clock 에 따라 count 하기 위해 필요한 신호. <br/>
 
 ``` systemverilog
    always_ff @(posedge i2.CLK) begin
@@ -322,26 +323,25 @@ cntryCntEnable : country highway 의 초록불의 주기를 clock 에 따라 cou
 ...
 ```
 
-&nbsp;구동원리 : FSM 을 이용하여, state 별로 동작하게 한다. <br/>
+&nbsp;구동원리 : FSM을 이용하여, State별로 동작하게 합니다. <br/>
 
 &nbsp;S0 (main : GREEN, country : RED) <br/>
-mainCntEnable 동작 -> main highway 의 초록불 -> cnt 의 counter 기능 활성화 -> inside 를 이용하여 우선순위를 받을시, 받아온 우선 순위를 이용하여 cnt 가 730 - (40 * 우선순위)가 넘어갈시 S1 으로 이동. <br/>
-그렇지 않다면, 신호등 기본 주기인 360 clock 뒤에 S1 으로 이동하도록 설계. <br/>
+MAIN_CNT_ENALBE 동작 -> Main Highway의 초록불 -> CNT의 카운터 기능 활성화 -> Inside를 이용하여 우선순위를 받을시, 받아온 우선 순위를 이용하여 CNT가 730 - (40 * 우선순위)가 넘어갈시 S1으로 이동. <br/>
+그렇지 않다면, 신호등 기본 주기인 360 Clock 뒤에 S1으로 이동하도록 설계. <br/>
 
 &nbsp;S1 (main : YELLOW, country : RED) <br/>
-main highway 의 노란불 -> 다음 클락에 S2 로 이동하도록 설계. <br/>
+Main Highway의 노란불 -> 다음 클락에 S2로 이동하도록 설계. <br/>
 
 &nbsp;S2 (main : RED, country : GREEN) <br/>
-cntryCntEnable 동작 -> country highway 의 초록불 -> cnt 의 counter 기능 활성화 -> 단, finalPulse 가 있을 시, country highway 의 차량이 30 대
-이상이므로 country highway 의 GREEN 주기를 240 clock 으로 늘려줌. <br/>
-그렇지 않다면, 신호등 기본 주기인 120 clock 뒤에 S3 로 이동하도록 설계. <br/>
+CNTRY_CNT_ENABLE 동작 -> Country Highway의 초록불 -> CNT의 카운터 기능 활성화 -> 단, FINAL_PULSE가 있을 시, Country Highway의 차량이 30대 이상이므로 Country Highway의 GREEN 주기를 240 Clock으로 늘려줌. <br/>
+그렇지 않다면, 신호등 기본 주기인 120 Clock 뒤에 S3로 이동하도록 설계. <br/>
 
 &nbsp;S3 (main : RED, country : YELLOW) <br/>
-country highway 의 노란불 -> 다음 클락에 S0 로 이동하도록 설계. <br/>
+Country Highway의 노란불 -> 다음 클락에 S0로 이동하도록 설계. <br/>
 
-&nbsp;이처럼, FSM 을 이용하여 간단한 신호등 모듈을 만들고, 외부적 요소들은 조건문을 추가하여 설계하였다. <br/>
+&nbsp;이처럼, FSM을 이용하여 간단한 신호등 모듈을 만들고, 외부적 요소들은 조건문을 추가하여 설계하였습니다. <br/>
 
-&nbsp;* controller 의 (0 -> 1 -> 0) pulse 를 1 의 신호로 변경하기 : prevPulse 에 controller 에서 주는 pulse(1)를 저장한 뒤, 현 clock 에서의 prevPulse == 0, 다음 clock 에서 prevPulse == 1 이 되는 것을 이용하여, finalPulse 를 1 로 변경. <br/>
+&nbsp;- CONTROLLER의 (0 -> 1 -> 0) Pulse를 1의 신호로 변경하기 : PREV_PULSE에 CONTROLLER에서 주는 Pulse(1)를 저장한 뒤, 현 Clock에서의 PREV_PULSE == 0, 다음 Clock에서 PREV_PULSE == 1 이 되는 것을 이용하여, FINAL_PULSE를 1로 변경. <br/>
 
 ### System 3. CONTROLLER
 
@@ -351,9 +351,9 @@ country highway 의 노란불 -> 다음 클락에 S0 로 이동하도록 설계.
 
 &nbsp;<strong>전용면적: 8653.63 (sq um)</strong>
 
-&nbsp;controller 모듈은 교차 도로와 메인 도로의 신호 상태와 교통량을 관리하며, 특정 조건에서 신호 제어 펄스를 생성한다. <br/>
-교차 도로의 누적 차량 수를 계산하고, 교통량 변화에 따라 메모리 작업 상태를 설정한다. <br/>
-또한, 누적 교통량 데이터를 기반으로 신호등 순위를 결정한다. <br/>
+&nbsp;CONTROLLER 모듈은 교차 도로와 메인 도로의 신호 상태와 교통량을 관리하며, 특정 조건에서 신호 제어 펄스를 생성합니다. <br/>
+교차 도로의 누적 차량 수를 계산하고, 교통량 변화에 따라 메모리 작업 상태를 설정합니다. <br/>
+또한, 누적 교통량 데이터를 기반으로 신호등 순위를 결정합니다. <br/>
 
 ``` systemverilog
 module CONTROLLER (SYSTEM_BUS.CONTROLLER i1);
@@ -364,19 +364,12 @@ module CONTROLLER (SYSTEM_BUS.CONTROLLER i1);
 ...
 ```
 
-&nbsp;country_car_number: 이 신호는 교차 도로의 누적 차량 수를 저장하는 역할을 한다. <br/>
-교차 도로의 차량 수가 업데이트될 때마다 증가하며, 일정 수치(예: 30)를 초과할 경우 신호 제어 펄스를 활성화한다. <br/>
-7 비트로 구성되어 있으며, 초기값은 0 으로 설정된다. <br/>
+&nbsp;- COUNTRY_CAR_NUMBER: 이 신호는 교차 도로의 누적 차량 수를 저장하는 역할을 합니다. 교차 도로의 차량 수가 업데이트될 때마다 증가하며, 일정 수치(예: 30)를 초과할 경우 신호 제어 펄스를 활성화합니다. 7비트로 구성되어 있으며, 초기값은 0으로 설정됩니다. <br/>
 
-&nbsp;prev_country_car_num: 이 신호는 이전 클럭 사이클에서의 교차 도로 차량 수를 저장한다. <br/>
-현재 교차 도로 차량 수와 비교하여 변화가 있는지 확인하는 데 사용된다. <br/>
-3 비트로 구성되어 있다. <br/>
+&nbsp;- PREV_COUNTRY_CAR_NUM: 이 신호는 이전 클럭 사이클에서의 교차 도로 차량 수를 저장합니다. 현재 교차 도로 차량 수와 비교하여 변화가 있는지 확인하는 데 사용됩니다. 3비트로 구성되어 있습니다. <br/>
 
-&nbsp;prev_current_traffic_amount: 이 신호는 이전 클럭 사이클에서의 메인 도로의 현재 교통량을 저장한다. <br/>
-현재 교통량과 비교하여 변화가 있는지 확인하는 데 사용된다. <br/>
-3 비트로 구성되어 있다. <br/>
+&nbsp;- PREV_CURRENT_TRAFFIC_AMOUNT: 이 신호는 이전 클럭 사이클에서의 메인 도로의 현재 교통량을 저장합니다. 현재 교통량과 비교하여 변화가 있는지 확인하는 데 사용됩니다. 3비트로 구성되어 있습니다. <br/>
 
-&nbsp;첫 번째 always_ff 블록에 대해서 설명하겠다. <br/>
 
 ``` systemverilog
 ...
@@ -387,8 +380,8 @@ module CONTROLLER (SYSTEM_BUS.CONTROLLER i1);
 ...
 ```
 
-&nbsp;이 블록은 교차 도로의 차량 수와 메인 도로의 교통량을 업데이트하는 역할을 한다. <br/>
-이전 값을 현재 값으로 저장하여 다음 클럭 사이클에서 비교할 수 있도록 한다. <br/>
+&nbsp;이 블록은 교차 도로의 차량 수와 메인 도로의 교통량을 업데이트하는 역할을 합니다. <br/>
+이전 값을 현재 값으로 저장하여 다음 클럭 사이클에서 비교할 수 있도록 합니다. <br/>
 
 ``` systemverilog
    always_ff @(posedge i1.CLK) begin
@@ -414,15 +407,15 @@ module CONTROLLER (SYSTEM_BUS.CONTROLLER i1);
    end // always_ff @ (posedge i1.CLK)
 ```
 
-&nbsp;이 블록은 교차 도로의 차량 수를 관리하고, 메인도로의 신호 상태에 따라 교차 도로 신호 제어 펄스를 생성한다. <br/>
+&nbsp;이 블록은 교차 도로의 차량 수를 관리하고, 메인도로의 신호 상태에 따라 교차 도로 신호 제어 펄스를 생성합니다. <br/>
 
-&nbsp;country_car_num 가 prev_country_car_num 과 다를 경우, 즉 교차 도로의 차량 수가 변화한 경우에 실행된다. <br/>
-예를들어 메인도로 신호가 녹색(light[0] == 1)일 때 누적 차량 수(country_car_number)에 현재 차량 수(country_car_num)를 더한다. <br/>
-누적 차량 수가 30 을 초과하면, 신호 제어 펄스(country_pulse)를 활성화(1)하고, 누적 차량 수를 초기화한다. <br/>
+&nbsp;COUNTRY_CAR_NUMBER가 PREV_COUNTRY_CAR_NUM과 다를 경우, 즉 교차 도로의 차량 수가 변화한 경우에 실행됩니다. <br/>
+예를들어, 메인도로 신호가 녹색(light[0] == 1)일 때 누적 차량 수(COUNTRY_CAR_NUMBER)에 현재 차량 수(COUNTRY_CAR_NUM)를 더합니다. <br/>
+누적 차량 수가 30을 초과하면, 신호 제어 펄스(COUNTRY_PULSE)를 활성화(1)하고, 누적 차량 수를 초기화합니다. <br/>
 
-&nbsp;그렇지 않으면, 신호 제어 펄스를 비활성화(0)한다. <br/>
-메인도로 신호가 녹색이 아닌 경우(light[0] == 0) 누적 차량 수와 신호 제어 펄스를 초기화한다. <br/>
-교차 도로의 차량 수가 이전 값과 동일한 경우 신호 제어 펄스를 비활성화한다. <br/>
+&nbsp;그렇지 않으면, 신호 제어 펄스를 비활성화(0)합니다. <br/>
+메인도로 신호가 녹색이 아닌 경우(light[0] == 0) 누적 차량 수와 신호 제어 펄스를 초기화합니다. <br/>
+교차 도로의 차량 수가 이전 값과 동일한 경우 신호 제어 펄스를 비활성화합니다. <br/>
 
 ``` systemverilog
 ...
@@ -440,14 +433,14 @@ module CONTROLLER (SYSTEM_BUS.CONTROLLER i1);
 ...
 ```
 
-&nbsp;이 블록은 현재 교통량을 관리하고, 메모리 작업 상태를 설정하며, 누적 교통량 데이터를 계산한다. <br/>
+&nbsp;이 블록은 현재 교통량을 관리하고, 메모리 작업 상태를 설정하며, 누적 교통량 데이터를 계산합니다. <br/>
 
-&nbsp;current_traffic_amount 가 prev_current_traffic_amount 와 다를 경우, 즉 현재 교통량이 변화한 경우에 실행된다. <br/>
-현재 교통량이 이전 값과 다른 경우 메모리 작업 상태(op)를 쓰기(WRITE)로 설정한다. <br/>
-현재 시간(hour)을 누적 데이터(accum_data1)의 상위 5 비트에 저장한다. <br/>
-현재 교통량(current_traffic_amount)과 이전에 누적된 교통량(accum_data2 의 상위 10 비트)을 더해 누적 데이터(accum_data1)의 하위 10 비트에 저장한다. <br/>
+&nbsp;CURRENT_TRAFFIC_AMOUNT 가 PREV_CURRENT_TRAFFIC_AMOUNT와 다를 경우, 즉 현재 교통량이 변화한 경우에 실행됩니다. <br/>
+현재 교통량이 이전 값과 다른 경우 메모리 작업 상태(OP)를 쓰기(WRITE)로 설정합니다. <br/>
+현재 시간(HOUR)을 누적 데이터(ACCUM_DATA1)의 상위 5비트에 저장합니다. <br/>
+현재 교통량(CURRENT_TRAFFIC_AMOUNT)과 이전에 누적된 교통량(ACCUM_DATA2의 상위 10비트)을 더해 누적 데이터(ACCUM_DATA1)의 하위 10비트에 저장합니다. <br/>
 
-&nbsp;현재 교통량이 이전 값과 같은 경우 메모리 작업 상태(op)를 읽기(READ)로 설정한다. <br/>
+&nbsp;현재 교통량이 이전 값과 같은 경우 메모리 작업 상태(OP)를 읽기(READ)로 설정합니다. <br/>
 
 ### System 4. MEMORY
 
@@ -457,10 +450,10 @@ module CONTROLLER (SYSTEM_BUS.CONTROLLER i1);
 
 &nbsp;<strong>전용면적: 212382.00 (sq um)</strong>
 
-&nbsp;memory1 모듈은 시간대별로 교통량과 순위 데이터를 저장하고 업데이트하는 역할을 한다. <br/>
-이 모듈은 컨트롤러로부터 받은 교통량 정보를 특정 시간대에 저장하며, Rank_Cal 로부터 받은 순위 데이터를 기반으로 교통량 순위를 업데이트한다. <br/>
-저장된 데이터는 다른 모듈로 전송되어 교통 상태를 관리하는 데 사용된다. <br/>
-또한, 현재 시간대의 교통량과 순위 데이터를 컨트롤러에 제공한다. <br/>
+&nbsp;MEMORY 모듈은 시간대별로 교통량과 순위 데이터를 저장하고 업데이트하는 역할을 합니다. <br/>
+이 모듈은 컨트롤러로부터 받은 교통량 정보를 특정 시간대에 저장하며, RANK_CALCULATOR로부터 받은 순위 데이터를 기반으로 교통량 순위를 업데이트합니다. <br/>
+저장된 데이터는 다른 모듈로 전송되어 교통 상태를 관리하는 데 사용됩니다. <br/>
+또한, 현재 시간대의 교통량과 순위 데이터를 컨트롤러에 제공합니다. <br/>
 
 ``` systemverilog
 module MEMORY (SYSTEM_BUS.MEM i3);
@@ -470,9 +463,9 @@ module MEMORY (SYSTEM_BUS.MEM i3);
 ...
 ```
 
-&nbsp;* memory 배열 (bit [19:0] memory[23:0]): 이 배열은 24 개의 20 비트 데이터를 저장하는 메모리이다. 각 시간대별로 데이터를 저장할 수 있도록 설계되었다. 상위 5 비트는 시간 정보 중간 10 비트는 교통량 정보 마지막 하위 5 비트는 교통량 순위 정보를 담고 있다. <br/>
+&nbsp;- MEMORY 배열 (bit [19:0] MEMORY[23:0]): 이 배열은 24개의 20비트 데이터를 저장하는 메모리입니다. 각 시간대별로 데이터를 저장할 수 있도록 설계되었습니다. 상위 5비트는 시간 정보, 중간 10비트는 교통량 정보, 마지막 하위 5비트는 교통량 순위 정보를 담고 있습니다. <br/>
 
-&nbsp;* 반복문 인덱스 (bit [4:0] i): i 는 for 루프에서 사용되는 반복문 인덱스이다. 메모리와 데이터 배열을 순회하며 데이터를 읽거나 쓸 때 사용된다. bit[4:0]은 5 비트 크기의 인덱스를 의미한다. 5 비트는 0 부터 31 까지의 값을 표현할 수 있으므로, 24 개의 데이터 인덱스를 순회하는 데 충분하게 사용할 수 있다. <br/>
+&nbsp;- 반복문 인덱스 (bit [4:0] i): i는 for 루프에서 사용되는 반복문 인덱스입니다. 메모리와 데이터 배열을 순회하며 데이터를 읽거나 쓸 때 사용됩니다. bit[4:0]은 5비트 크기의 인덱스를 의미합니다. 5비트는 0부터 31까지의 값을 표현할 수 있으므로, 24개의 데이터 인덱스를 순회하는 데 충분하게 사용할 수 있습니다. <br/>
 
 ``` systemverilog
 ...
@@ -497,25 +490,25 @@ module MEMORY (SYSTEM_BUS.MEM i3);
 ...
 ```
 
-&nbsp;always_ff 블록은 클럭 신호 (clk)의 상승 에지에서 동작한다. <br/>
-이 블록은 주어진 연산 명령 (op1 및 op2)에 따라 메모리 읽기 및 쓰기 작업을 수행하며 누적 교통량 데이터와 교통량 순위 데이터를 관리한다. <br/>
+&nbsp;always_ff 블록은 클럭 신호 (CLK)의 상승 에지에서 동작합니다. <br/>
+이 블록은 주어진 연산 명령 (OP1 및 OP2)에 따라 메모리 읽기 및 쓰기 작업을 수행하며 누적 교통량 데이터와 교통량 순위 데이터를 관리합니다. <br/>
 
-&nbsp;* WRITE 동작 (op1 이 WRITE 일 때) <br/>
-op1 이 WRITE 인 경우, 현재 시간 (hour)에 해당하는 메모리 위치에 누적 교통량 데이터 (accum_data1[14:0])를 저장한다. <br/>
-메모리의 상위 15 비트([19:5])에 저장된다. <br/>
-모든 시간대에 대해 누적 교통량 데이터를 traffic_data 배열에 갱신한다. <br/>
-메모리의 상위 15 비트 ([19:5])를 traffic_data 의 각 시간대 위치에 복사한다. <br/>
+&nbsp;- WRITE 동작 (OP1이 WRITE 일 때) <br/>
+OP1이 WRITE인 경우, 현재 시간 (HOUR)에 해당하는 메모리 위치에 누적 교통량 데이터 (ACCUM_DATA1[14:0])를 저장합니다. <br/>
+메모리의 상위 15비트([19:5])에 저장됩니다. <br/>
+모든 시간대에 대해 누적 교통량 데이터를 TRAFFIC_DATA 배열에 갱신합니다. <br/>
+메모리의 상위 15비트([19:5])를 TRAFFIC_DATA의 각 시간대 위치에 복사합니다. <br/>
 
-&nbsp;* WRITE 동작 (op2 가 WRITE 일 때) <br/>
-op2 가 WRITE 인 경우, 모든 시간대에 대해 교통량 순위 데이터를 메모리에 갱신한다. <br/>
-각 시간대의 교통량 순위 데이터 (traffic_ranked_data[i][4:0])를 메모리의 하위 5 비트 ([4:0])에 저장한다. <br/>
-현재 시간 (hour)에 해당하는 메모리 위치에서 누적 교통량과 순위 데이터를 읽어와서 accum_data2 에 저장한다. <br/>
+&nbsp;- WRITE 동작 (OP2가 WRITE 일 때) <br/>
+OP2가 WRITE인 경우, 모든 시간대에 대해 교통량 순위 데이터를 메모리에 갱신합니다. <br/>
+각 시간대의 교통량 순위 데이터(TRAFFIC_RANKED_DATA[i][4:0])를 메모리의 하위 5비트([4:0])에 저장합니다. <br/>
+현재 시간(HOUR)에 해당하는 메모리 위치에서 누적 교통량과 순위 데이터를 읽어와서 ACCUM_DATA2에 저장합니다. <br/>
 
-&nbsp;* 기본 동작 (READ 동작) <br/>
-기본 동작으로, op1 이 READ 일 때와 유사하게 현재 시간 (hour)에 해당하는 메모리 위치에 누적 교통량 데이터를 저장하고 (accum_data1[14:0]), 그 위치에서 누적 교통량과 순위 데이터를 읽어와서 accum_data2 에 저장한다. <br/>
+&nbsp;- 기본 동작 (READ 동작) <br/>
+기본 동작으로 OP1이 READ 일 때와 유사하게 현재 시간(HOUR)에 해당하는 메모리 위치에 누적 교통량 데이터를 저장하고(ACCUM_DATA1[14:0]), 그 위치에서 누적 교통량과 순위 데이터를 읽어와서 ACCUM_DATA2에 저장합니다. <br/>
 
-&nbsp;memory1 은 위와 같은 로직에 의해서 입력된 데이터를 메모리에 저장하고, 저장된 데이터를 출력 포트로 제공한다. <br/>
-따라서 외부에 의해 연산 명령이 주어지면 메모리의 읽기 및 쓰기 작업을 수행할 수 있다. <br/>
+&nbsp;MEMORY는 위와 같은 로직에 의해서 입력된 데이터를 메모리에 저장하고, 저장된 데이터를 출력 포트로 제공합니다. <br/>
+따라서, 외부에 의해 연산 명령이 주어지면 메모리의 읽기 및 쓰기 작업을 수행할 수 있습니다. <br/>
 
 ### System 5. RANK_CALCULATOR
 
@@ -525,8 +518,8 @@ op2 가 WRITE 인 경우, 모든 시간대에 대해 교통량 순위 데이터�
 
 &nbsp;<strong>전용면적: 416855.56 (sq um)</strong>
 
-&nbsp;rank_cal 모듈은 Memory 로부터 받은 시각, 교통량의 정보를 교통량의 순서대로 정렬해 출력으로 현재 시각과 해당하는 순위른 다시 Memory에 보낸다. <br/>
-순위는 1 부터 24 로 나타나며 입력이 들어오지 않은 시각대에서 순위를 0 으로 보낸다. <br/>
+&nbsp;RANK_CALCULATOR 모듈은 MEMORY로부터 받은 시각, 교통량의 정보를 교통량의 순서대로 정렬해 출력으로 현재 시각과 해당하는 순위른 다시 MEMORY에 보냅니다. <br/>
+순위는 1부터 24로 나타나며, 입력이 들어오지 않은 시각대에서 순위를 0으로 보냅니다. <br/>
 
 ``` systemverilog
 ...
@@ -544,10 +537,10 @@ op2 가 WRITE 인 경우, 모든 시간대에 대해 교통량 순위 데이터�
 ...
 ```
 
-&nbsp;들어온 24 개 시각에 대해 우선 출력으로 나가는 순위 정보를 모두 0 으로 초기화 한다. <br/>
-다음으로 반복문을 사용하여 하나의 input 의 교통량을 다른 모든 23 개의 input 의 교통량과 비교한다. <br/>
-만약 교통량이 적다면 순위는 하나씩 더해져 뒤로 밀려난다. <br/>
-만약 같은 순위가 2 개 나오다면 다음 중복되는 수만큼 순위가 뒤로 밀려난다.(ex. 1 2 3 3 3 6 위 …) <br/>
+&nbsp;들어온 24개 시각에 대해 우선 출력으로 나가는 순위 정보를 모두 0으로 초기화 합니다. <br/>
+다음으로, 반복문을 사용하여 하나의 Input의 교통량을 다른 모든 23개의 Input의 교통량과 비교합니다. <br/>
+만약, 교통량이 적다면 순위는 하나씩 더해져 뒤로 밀려납니다. <br/>
+만약, 같은 순위가 2개 나오다면 다음 중복되는 수만큼 순위가 뒤로 밀려납니다.(ex. 1 2 3 3 3 6 위 …) <br/>
 
 ``` systemverilog
 ...
@@ -559,8 +552,8 @@ op2 가 WRITE 인 경우, 모든 시간대에 대해 교통량 순위 데이터�
 ...
 ```
 
-&nbsp;위 코드에서 순위의 초기값을 0 으로 설정했기에 순위를 모두 1 더해줘 1 부터 시작하게 만든다. <br/>
-대신 input 이 들어온 경우만 한해서 순위가 개선되고 입력이 들어오지 않은 시간대에는 순위가 여전히 0 이 나타나게 된다. <br/>
+&nbsp;위 코드에서 순위의 초기값을 0으로 설정했기에 순위를 모두 1을 더해줘, 1부터 시작하게 만듭니다. <br/>
+대신 Input이 들어온 경우만 한해서 순위가 개선되고 입력이 들어오지 않은 시간대에는 순위가 여전히 0이 나타나게 됩니다. <br/>
 
 ``` systemverilog
 		for (i = 0; i < 24; i ++) begin
@@ -575,10 +568,10 @@ op2 가 WRITE 인 경우, 모든 시간대에 대해 교통량 순위 데이터�
 endmodule
 ```
 
-&nbsp;Memory 에게 다시 데이터를 보내주기 위해서 10bit 정보를 구성한다. <br/>
-상위 5bit 에는 입력에 해당하는 현재 시각 정보가, 하위 5bit 에는 내부 logic 으로 저장된 rank 값이 할당 된다. <br/>
-따라서 입력이 존재한다면 현재 시각과 그에 해당하는 교통량의 순위가 10bit 로 구성되 출력으로 나온다. <br/>
-입력이 없는 경우 rank 에 내부 logic 으로 0 이 저장되어 있기 때문에 입력으로 들어오지 않은 시각의 순위는 0 으로 출력이 나타난다. <br/>
+&nbsp;MEMORY에게 다시 데이터를 보내주기 위해서 10bit 정보를 구성합니다. <br/>
+상위 5bit에는 입력에 해당하는 현재 시각 정보가, 하위 5bit에는 내부 Logic으로 저장된 Rank 값이 할당 됩니다. <br/>
+따라서, 입력이 존재한다면 현재 시각과 그에 해당하는 교통량의 순위가 10bit로 구성되 출력으로 나옵니다. <br/>
+입력이 없는 경우, Rank에 내부 Logic으로 0이 저장되어 있기 때문에 입력으로 들어오지 않은 시각의 순위는 0으로 출력이 나타납니다. <br/>
 
 ## 4. Module Verification
 ### 4-1. Interface
@@ -606,7 +599,7 @@ interface SYSTEM_BUS (
 ...
 ```
 
-&nbsp;위 신호등 시스템에서 Interface 를 통해서 연결한 것을 확인하면 신호등 내부에 수많은 데이터 정보의 흐름이 존재하지만, 우리가 관심있는 영역에 대해서 Interface 를 통해 묶고 나머지는 내부 변수로 처리했음을 알 수 있다. <br/>
+&nbsp;위 신호등 시스템에서 Interface를 통해서 연결한 것을 확인하면, 신호등 내부에 수많은 데이터 정보의 흐름이 존재하지만, 우리가 관심있는 영역에 대해서 Interface를 통해 묶고 나머지는 내부 변수로 처리했음을 알 수 있습니다. <br/>
 
 ``` systemverilog
 ...
@@ -638,7 +631,7 @@ interface SYSTEM_BUS (
 endinterface // SYSTEM_BUS
 ```
 
-&nbsp;System Verilog 의 modport 는 Interface 의 특정 신호에 대한 접근 권한을 정의하는데 사용되며 이를 통해 인터페이스를 사용하는 모듈의 역할에 따라 신호의 입출력 방향을 명확히 설정할 수 있다. <br/>
+&nbsp;System Verilog의 Modport는 Interface의 특정 신호에 대한 접근 권한을 정의하는데 사용되며, 이를 통해 인터페이스를 사용하는 모듈의 역할에 따라 신호의 입출력 방향을 명확히 설정할 수 있습니다. <br/>
 
 ### 4-2. Randomize Testbench Input
 
@@ -662,22 +655,22 @@ endinterface // SYSTEM_BUS
    end
 ```
 
-&nbsp;randomize 를 license 때문에 사용할 수 없기 때문에 임의로 randomize 하게 보이는 testbench 를 구현했다. <br/>
-이 system 에서는 2ns 를 1 초라고 정의하였다. <br/>
-120 까지 도는 for 문 2 개를 이용했는데 중첩하여 이용했다. <br/>
-내부 for 문에 60 의 delay 를 주어서 7200ns 즉 1 시간을 120 번 돌아서 5 일동안 동작하게 구현하였다. <br/>
-그리고 main 교통량을 구현할때 이전 교통량을 저장해두고 해당인덱스를 더하고 5 로 나누어서 0~4 까지로 교통량을 수치화하였다. <br/>
-이전 교통량에 인덱스를 더하고 나누어 주면서 testbench 를 실행했을때 무작위 처럼 보이는 교통량 입력을 주었다. <br/>
+&nbsp;Randomize를 License가 없어 사용할 수 없기 때문에, 임의로 Randomize하게 보이는 Testbench를 구현했습니다. <br/>
+이 System에서는 2ns를 1초라고 정의하였습니다. <br/>
+120까지 도는 for문 2개를 이용했는데 중첩하여 이용했습니다. <br/>
+내부 for문에 60의 Delay를 주어서 7200ns 즉 1시간을 120번 돌아서 5일동안 동작하게 구현하였습니다. <br/>
+그리고 Main 교통량을 구현할 때, 이전 교통량을 저장해두고 해당인덱스를 더하고 5로 나누어서 0~4까지로 교통량을 수치화하였습니다. <br/>
+이전 교통량에 인덱스를 더하고 나누어 주면서, Testbench를 실행했을때 무작위 처럼 보이는 교통량 입력을 주었습니다. <br/>
 
 ### 4-3. Assertion(Immediate, Not Concurrent)
 
-&nbsp;sequential logic 을 사용한 시스템으로서, concurrent assertions 을 사용해야 하지만, license 문제로 인해 immediate assertions 을 사용해야만 했다. <br/>
-이는, combinational logic 을 위한 검증으로 본 시스템에는 다소 맞지 않다. <br/>
+&nbsp;Sequential Logic을 사용한 시스템으로서, Concurrent Assertions을 사용해야 하지만, License 문제로 인해 Immediate Assertions을 사용해야만 했습니다. <br/>
+이는, Combinational Logic을 위한 검증으로 본 시스템에는 다소 맞지 않습니다. <br/>
 
-&nbsp;아래는, 각 모듈에서 중요한 신호나 logic 을 위한 <span style="color:red">6 가지의 assertion</span> 이다. <br/>
-각각의 시스템은 이와같이 동작할 것을 암시한다. <br/>
+&nbsp;아래는, 각 모듈에서 중요한 신호나 Logic을 위한 <span style="color:red">6 가지의 Assertion</span> 입니다. <br/>
+각각의 시스템은 이와같이 동작할 것을 암시합니다. <br/>
 
-&nbsp;<strong><u>저희가 설계한 시스템은 아래와 같이 많은 assertion 을 이용함으로써 스마트한 검증이라는 설계 스펙에 최대한 부합하게 설계하였습니다.</strong></u> <br/>
+&nbsp;<strong><u>저희가 설계한 시스템은 아래와 같이 많은 Assertion을 이용함으로써, 스마트한 검증이라는 설계 스펙에 최대한 부합하게 설계하였습니다.</strong></u> <br/>
 
 &nbsp;CONTROLLER : CHECK_PULSE, CHECK_ACCUM_DATA <br/>
 &nbsp;TRAFFICLIGHT : CHECK_FINAL_PULSE, CHECK_CNT <br/>
@@ -699,8 +692,8 @@ endinterface // SYSTEM_BUS
 	<img width="90%" alt="Memory Overflow Waveform Image" src="https://github.com/user-attachments/assets/38fad131-5f5f-489c-b541-03eb9200a949" />
 </p>
 
-&nbsp;첫 번째 사진은 controller 모듈의 일부이다. <br/>
-controller 는 메모리가 controller 에게 주는 정보인 accum_data2 와 현재 main highway 의 traffic 정보인 current_traffic_amount 를 덧셈 연산하여 accum_data1 에 전달해 준다. <br/>
+&nbsp;첫 번째 사진은 CONTROLLER 모듈의 일부입니다. <br/>
+CONTROLLER는 메모리가 controller 에게 주는 정보인 accum_data2 와 현재 main highway 의 traffic 정보인 current_traffic_amount 를 덧셈 연산하여 accum_data1 에 전달해 준다. <br/>
 이때 60~61 번째 줄을 확인하면 assert 구문의 활용을 볼 수 있다. <br/>
 해당 assert 구문은 교통량 정보를 축적하여 저장하는 메모리가 오버플로우 나는 경우를 탐지한다. <br/>
 테스트 벤치에서 강제로 current_traffic_amount 와 연결된 mainToCtrl 에 10’b1111111111 의 값을 넣어 주었고 fatal 에 의해서
