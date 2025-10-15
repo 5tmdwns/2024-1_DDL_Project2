@@ -6,27 +6,27 @@
 </p>
 
 ## Index ⭐️
-- [1. 프로젝트 주제 및 목표](#1-프로젝트-주제-및-목표) <br/>
-- [2. 프로젝트 설계 및 구성](#2-프로젝트-설계-및-구성) <br/>
-  - [2-1. Circuit Diagram](#2-1-Circuit-Diagram) <br/>
-  - [2-2. System Description](#2-2-System-Description) <br/>
-  - [2-3. 각 System 역할](#2-3-각-System-역할) <br/>
-- [3. 각 System 설명](#3-각-system-설명) <br/>
-- [4. Module Verification](#4-Module-Verification) <br/>
-  - [4-1. Interface](#4-1-Interface) <br/>
-  - [4-2. Randomize Testbench Input](#4-2-Randomize-Testbench-Input) <br/>
-  - [4-3. Assertion(Immediate, Not Concurrent)](#4-3-AssertionImmediate-Not-Concurrent) <br/>
-  	- [4-3-1. Memory Overflow](#4-3-1-Memory-Overflow) <br/>
-	- [4-3-2. CHECK_PULSE, CHECK_FINAL_PULSE](#4-3-2-CHECK_PULSE-CHECK_FINAL_PULSE) <br/>
-	- [4-3-3. CEHCK_CNT](#4-3-3-CHECK_CNT) <br/>
-	- [4-3-4. CHECK_ACCUM_EQUAL, CHECK_RANK](#4-3-4-CHECK_ACCUM_EQUAL-CHECK_RANK) <br/>
-	- [4-3-5. CHECK_ACCUM_DATA](#4-3-5-CHECK_ACCUM_DATA) <br/>
-- [5. Testbench Waveform](#5-Testbench-Waveform) <br/>
-  - [5-1. Traffic Inpu](#5-1-Traffic-Input) <br/>
-  - [5-2. Base Light Period](#5-2-Base-Light-Period) <br/>
-  - [5-3. Country Road 데이터 축적 및 신호 강제 변경](#5-3-Country-Road-데이터-축적-및-신호-강제-변경) <br/>
-  - [5-4. Traffic Rank](#5-4-Traffic-Rank) <br/>
-  - [5-5. Light Period by Accumulated Traffic](#5-5-Light-Period-by-Accumulated-Traffic) <br/>
+- [1. 프로젝트 주제 및 목표](#1-프로젝트-주제-및-목표)
+- [2. 프로젝트 설계 및 구성](#2-프로젝트-설계-및-구성)
+  - [2-1. Circuit Diagram](#2-1-Circuit-Diagram)
+  - [2-2. System Description](#2-2-System-Description)
+  - [2-3. 각 System 역할](#2-3-각-System-역할)
+- [3. 각 System 설명](#3-각-system-설명)
+- [4. Module Verification](#4-Module-Verification)
+  - [4-1. Interface](#4-1-Interface)
+  - [4-2. Randomize Testbench Input](#4-2-Randomize-Testbench-Input)
+  - [4-3. Assertion(Immediate, Not Concurrent)](#4-3-AssertionImmediate-Not-Concurrent)
+  	- [4-3-1. Memory Overflow](#4-3-1-Memory-Overflow)
+	- [4-3-2. CHECK_PULSE, CHECK_FINAL_PULSE](#4-3-2-CHECK_PULSE-CHECK_FINAL_PULSE)
+	- [4-3-3. CEHCK_CNT](#4-3-3-CHECK_CNT)
+	- [4-3-4. CHECK_ACCUM_EQUAL, CHECK_RANK](#4-3-4-CHECK_ACCUM_EQUAL-CHECK_RANK)
+	- [4-3-5. CHECK_ACCUM_DATA](#4-3-5-CHECK_ACCUM_DATA)
+- [5. Testbench Waveform](#5-Testbench-Waveform)
+  - [5-1. Traffic Inpu](#5-1-Traffic-Input)
+  - [5-2. Base Light Period](#5-2-Base-Light-Period)
+  - [5-3. Country Road 데이터 축적 및 신호 강제 변경](#5-3-Country-Road-데이터-축적-및-신호-강제-변경)
+  - [5-4. Traffic Rank](#5-4-Traffic-Rank)
+  - [5-5. Light Period by Accumulated Traffic](#5-5-Light-Period-by-Accumulated-Traffic)
 - [6. 결론](#6-결론) <br/>
 
 ## 1. 프로젝트 주제 및 목표
@@ -341,7 +341,7 @@ Country Highway의 노란불 -> 다음 클락에 S0로 이동하도록 설계. <
 
 &nbsp;이처럼, FSM을 이용하여 간단한 신호등 모듈을 만들고, 외부적 요소들은 조건문을 추가하여 설계하였습니다. <br/>
 
-&nbsp;- CONTROLLER의 (0 -> 1 -> 0) Pulse를 1의 신호로 변경하기 : PREV_PULSE에 CONTROLLER에서 주는 Pulse(1)를 저장한 뒤, 현 Clock에서의 PREV_PULSE == 0, 다음 Clock에서 PREV_PULSE == 1 이 되는 것을 이용하여, FINAL_PULSE를 1로 변경. <br/>
+&nbsp;- CONTROLLER의 (0 -> 1 -> 0) Pulse를 1의 신호로 변경하기 : PREV_PULSE에 CONTROLLER에서 주는 Pulse(1)를 저장한 뒤, 현 Clock에서의 PREV_PULSE == 0, 다음 Clock에서 PREV_PULSE == 1 이 되는 것을 이용하여, FINAL_PULSE를 1로 변경.
 
 ### System 3. CONTROLLER
 
@@ -364,11 +364,11 @@ module CONTROLLER (SYSTEM_BUS.CONTROLLER i1);
 ...
 ```
 
-&nbsp;- COUNTRY_CAR_NUMBER: 이 신호는 교차 도로의 누적 차량 수를 저장하는 역할을 합니다. 교차 도로의 차량 수가 업데이트될 때마다 증가하며, 일정 수치(예: 30)를 초과할 경우 신호 제어 펄스를 활성화합니다. 7비트로 구성되어 있으며, 초기값은 0으로 설정됩니다. <br/>
+&nbsp;- COUNTRY_CAR_NUMBER: 이 신호는 교차 도로의 누적 차량 수를 저장하는 역할을 합니다. 교차 도로의 차량 수가 업데이트될 때마다 증가하며, 일정 수치(예: 30)를 초과할 경우 신호 제어 펄스를 활성화합니다. 7비트로 구성되어 있으며, 초기값은 0으로 설정됩니다.
 
-&nbsp;- PREV_COUNTRY_CAR_NUM: 이 신호는 이전 클럭 사이클에서의 교차 도로 차량 수를 저장합니다. 현재 교차 도로 차량 수와 비교하여 변화가 있는지 확인하는 데 사용됩니다. 3비트로 구성되어 있습니다. <br/>
+&nbsp;- PREV_COUNTRY_CAR_NUM: 이 신호는 이전 클럭 사이클에서의 교차 도로 차량 수를 저장합니다. 현재 교차 도로 차량 수와 비교하여 변화가 있는지 확인하는 데 사용됩니다. 3비트로 구성되어 있습니다.
 
-&nbsp;- PREV_CURRENT_TRAFFIC_AMOUNT: 이 신호는 이전 클럭 사이클에서의 메인 도로의 현재 교통량을 저장합니다. 현재 교통량과 비교하여 변화가 있는지 확인하는 데 사용됩니다. 3비트로 구성되어 있습니다. <br/>
+&nbsp;- PREV_CURRENT_TRAFFIC_AMOUNT: 이 신호는 이전 클럭 사이클에서의 메인 도로의 현재 교통량을 저장합니다. 현재 교통량과 비교하여 변화가 있는지 확인하는 데 사용됩니다. 3비트로 구성되어 있습니다.
 
 
 ``` systemverilog
@@ -463,9 +463,9 @@ module MEMORY (SYSTEM_BUS.MEM i3);
 ...
 ```
 
-&nbsp;- MEMORY 배열 (bit [19:0] MEMORY[23:0]): 이 배열은 24개의 20비트 데이터를 저장하는 메모리입니다. 각 시간대별로 데이터를 저장할 수 있도록 설계되었습니다. 상위 5비트는 시간 정보, 중간 10비트는 교통량 정보, 마지막 하위 5비트는 교통량 순위 정보를 담고 있습니다. <br/>
+&nbsp;- MEMORY 배열 (bit [19:0] MEMORY[23:0]): 이 배열은 24개의 20비트 데이터를 저장하는 메모리입니다. 각 시간대별로 데이터를 저장할 수 있도록 설계되었습니다. 상위 5비트는 시간 정보, 중간 10비트는 교통량 정보, 마지막 하위 5비트는 교통량 순위 정보를 담고 있습니다.
 
-&nbsp;- 반복문 인덱스 (bit [4:0] i): i는 for 루프에서 사용되는 반복문 인덱스입니다. 메모리와 데이터 배열을 순회하며 데이터를 읽거나 쓸 때 사용됩니다. bit[4:0]은 5비트 크기의 인덱스를 의미합니다. 5비트는 0부터 31까지의 값을 표현할 수 있으므로, 24개의 데이터 인덱스를 순회하는 데 충분하게 사용할 수 있습니다. <br/>
+&nbsp;- 반복문 인덱스 (bit [4:0] i): i는 for 루프에서 사용되는 반복문 인덱스입니다. 메모리와 데이터 배열을 순회하며 데이터를 읽거나 쓸 때 사용됩니다. bit[4:0]은 5비트 크기의 인덱스를 의미합니다. 5비트는 0부터 31까지의 값을 표현할 수 있으므로, 24개의 데이터 인덱스를 순회하는 데 충분하게 사용할 수 있습니다.
 
 ``` systemverilog
 ...
@@ -493,18 +493,18 @@ module MEMORY (SYSTEM_BUS.MEM i3);
 &nbsp;always_ff 블록은 클럭 신호 (CLK)의 상승 에지에서 동작합니다. <br/>
 이 블록은 주어진 연산 명령 (OP1 및 OP2)에 따라 메모리 읽기 및 쓰기 작업을 수행하며 누적 교통량 데이터와 교통량 순위 데이터를 관리합니다. <br/>
 
-&nbsp;- WRITE 동작 (OP1이 WRITE 일 때) <br/>
+&nbsp;- WRITE 동작 (OP1이 WRITE 일 때)
 OP1이 WRITE인 경우, 현재 시간 (HOUR)에 해당하는 메모리 위치에 누적 교통량 데이터 (ACCUM_DATA1[14:0])를 저장합니다. <br/>
 메모리의 상위 15비트([19:5])에 저장됩니다. <br/>
 모든 시간대에 대해 누적 교통량 데이터를 TRAFFIC_DATA 배열에 갱신합니다. <br/>
 메모리의 상위 15비트([19:5])를 TRAFFIC_DATA의 각 시간대 위치에 복사합니다. <br/>
 
-&nbsp;- WRITE 동작 (OP2가 WRITE 일 때) <br/>
+&nbsp;- WRITE 동작 (OP2가 WRITE 일 때)
 OP2가 WRITE인 경우, 모든 시간대에 대해 교통량 순위 데이터를 메모리에 갱신합니다. <br/>
 각 시간대의 교통량 순위 데이터(TRAFFIC_RANKED_DATA[i][4:0])를 메모리의 하위 5비트([4:0])에 저장합니다. <br/>
 현재 시간(HOUR)에 해당하는 메모리 위치에서 누적 교통량과 순위 데이터를 읽어와서 ACCUM_DATA2에 저장합니다. <br/>
 
-&nbsp;- 기본 동작 (READ 동작) <br/>
+&nbsp;- 기본 동작 (READ 동작)
 기본 동작으로 OP1이 READ 일 때와 유사하게 현재 시간(HOUR)에 해당하는 메모리 위치에 누적 교통량 데이터를 저장하고(ACCUM_DATA1[14:0]), 그 위치에서 누적 교통량과 순위 데이터를 읽어와서 ACCUM_DATA2에 저장합니다. <br/>
 
 &nbsp;MEMORY는 위와 같은 로직에 의해서 입력된 데이터를 메모리에 저장하고, 저장된 데이터를 출력 포트로 제공합니다. <br/>
