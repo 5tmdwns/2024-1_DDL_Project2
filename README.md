@@ -667,10 +667,10 @@ endinterface // SYSTEM_BUS
 &nbsp;Sequential Logic을 사용한 시스템으로서, Concurrent Assertions을 사용해야 하지만, License 문제로 인해 Immediate Assertions을 사용해야만 했습니다. <br/>
 이는, Combinational Logic을 위한 검증으로 본 시스템에는 다소 맞지 않습니다. <br/>
 
-&nbsp;아래는, 각 모듈에서 중요한 신호나 Logic을 위한 <font color="red">6 가지의 Assertion</font> 입니다. <br/>
+&nbsp;아래는, 각 모듈에서 중요한 신호나 Logic을 위한 ${\textsf{\color{red}6가지의 Assertion}}$ 입니다. <br/>
 각각의 시스템은 이와같이 동작할 것을 암시합니다. <br/>
 
-&nbsp;<strong><u>저희가 설계한 시스템은 아래와 같이 많은 Assertion을 이용함으로써, 스마트한 검증이라는 설계 스펙에 최대한 부합하게 설계하였습니다.</u></strong> <br/>
+&nbsp;<strong><ins>저희가 설계한 시스템은 아래와 같이 많은 Assertion을 이용함으로써, 스마트한 검증이라는 설계 스펙에 최대한 부합하게 설계하였습니다.</ins></strong> <br/>
 
 &nbsp;CONTROLLER : CHECK_PULSE, CHECK_ACCUM_DATA <br/>
 &nbsp;TRAFFICLIGHT : CHECK_FINAL_PULSE, CHECK_CNT <br/>
